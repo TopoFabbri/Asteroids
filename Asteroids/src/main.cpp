@@ -15,10 +15,11 @@ void runProgram()
 {
     Game game = newGame();
     defaults();
-    loop();
+    loop(game);
 }
 
 void defaults()
 {
     srand(time(nullptr));
+    InitWindow(800, 800, "Asteroids - Topo");
 }
