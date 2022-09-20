@@ -13,8 +13,8 @@ void main()
 
 void runProgram()
 {
-    Game game = newGame();
     defaults();
+    Game game = newGame();
     loop(game);
 }
 

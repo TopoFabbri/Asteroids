@@ -159,7 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="src\Bullet.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Settings.cpp" />
@@ -167,7 +167,7 @@
     <ClCompile Include="Src\Topo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="src\Bullet.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Ship.h" />

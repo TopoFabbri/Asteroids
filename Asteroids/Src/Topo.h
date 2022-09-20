@@ -50,3 +50,4 @@ bool recCircleColliding(Rectangle rec, Circle cir);
 Vector2 getCircleRecCollisionPos(Rectangle rec, Circle circ);
 float getVectorMagnitude(Vector2 vec);
 Vector2 normalizeVector(Vector2 vec);
+float getRotation(Vector2 dir);

@@ -217,3 +217,10 @@ Vector2 normalizeVector(Vector2 vec)
 
 	return { vec.x / mag, vec.y / mag };
 }
+
+float getRotation(Vector2 dir)
+{
+	float rot = 0;
+
+
+}

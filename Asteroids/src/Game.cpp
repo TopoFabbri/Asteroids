@@ -56,7 +56,7 @@ void update(Game& game)
 {
 	input(game);
 	moveShip(game.ship);
-	shipBounce(game.ship);
+	shipPortal(game.ship);
 }
 
 void draw(Game& game)
@@ -80,11 +80,13 @@ void input(Game& game)
 
 		moveDir = normalizeVector({ moveDir.x - game.ship.pos.x, moveDir.y - game.ship.pos.y });
 
-		DrawText(TextFormat("%f", getVectorMagnitude({ moveDir.x - game.ship.pos.x, moveDir.y - game.ship.pos.y })),
-			10, 10, 20, GREEN);
-
 		axisX = moveDir.x;
 		axisY = moveDir.y;
+	}
+
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+	{
+		fireBullet(game.ship.pos, game.ship.bul);
 	}
 
 	accelerateShip(axisX, axisY, game.ship);
