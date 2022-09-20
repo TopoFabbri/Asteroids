@@ -205,3 +205,15 @@ Vector2 getCircleRecCollisionPos(Rectangle rec, Circle circ)
 	}
 	return colPos;
 }
+
+float getVectorMagnitude(Vector2 vec)
+{
+	return sqrtf(std::powf(vec.x, 2) + std::powf(vec.y, 2));
+}
+
+Vector2 normalizeVector(Vector2 vec)
+{
+	float mag = getVectorMagnitude(vec);
+
+	return { vec.x / mag, vec.y / mag };
+}

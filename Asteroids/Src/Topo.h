@@ -48,3 +48,5 @@ bool compareVectors(Vector2 v1, Vector2 v2);
 bool inRange(float toComp, float min, float max);
 bool recCircleColliding(Rectangle rec, Circle cir);
 Vector2 getCircleRecCollisionPos(Rectangle rec, Circle circ);
+float getVectorMagnitude(Vector2 vec);
+Vector2 normalizeVector(Vector2 vec);

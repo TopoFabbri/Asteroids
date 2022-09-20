@@ -7,9 +7,9 @@ Ship newShip()
 		{ (float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2 },
 		{0, 0},
 		WHITE,
-		100,
+		200,
 		1,
-		30,
+		15,
 		0
 	};
 }
@@ -28,18 +28,18 @@ void accelerateShip(float axisX, float axisY, Ship& ship)
 
 void drawShip(Ship ship)
 {
-	DrawLineV({ ship.pos.x + ship.size / 2, ship.pos.y + ship.size / 2 }, GetMousePosition(), RED);
-	DrawRectangleV(ship.pos, {ship.size, ship.size}, ship.color);
+	//DrawLineV({ ship.pos.x + ship.size / 2, ship.pos.y + ship.size / 2 }, GetMousePosition(), RED);
+	DrawCircleV(ship.pos, ship.size, WHITE);
 }
 
 void shipBounce(Ship& ship)
 {
-	if (ship.pos.x <= 0)
+	if (ship.pos.x - ship.size <= 0)
 		ship.vel.x = abs(ship.vel.x);
 	else if (ship.pos.x + ship.size >= (float)GetScreenWidth())
 		ship.vel.x = -abs(ship.vel.x);
 
-	if (ship.pos.y <= 0)
+	if (ship.pos.y - ship.size <= 0)
 		ship.vel.y = abs(ship.vel.y);
 	else if (ship.pos.y + ship.size >= (float)GetScreenHeight())
 		ship.vel.y = -abs(ship.vel.y);

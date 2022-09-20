@@ -74,17 +74,18 @@ void input(Game& game)
 	float axisX = 0;
 	float axisY = 0;
 
-	if (IsKeyDown(KEY_W))
-		axisY = -1;
+	if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
+	{
+		Vector2 moveDir = { (float)GetMouseX(), (float)GetMouseY() };
 
-	if (IsKeyDown(KEY_S))
-		axisY = 1;
+		moveDir = normalizeVector({ moveDir.x - game.ship.pos.x, moveDir.y - game.ship.pos.y });
 
-	if (IsKeyDown(KEY_A))
-		axisX = -1;
+		DrawText(TextFormat("%f", getVectorMagnitude({ moveDir.x - game.ship.pos.x, moveDir.y - game.ship.pos.y })),
+			10, 10, 20, GREEN);
 
-	if (IsKeyDown(KEY_D))
-		axisX = 1;
+		axisX = moveDir.x;
+		axisY = moveDir.y;
+	}
 
 	accelerateShip(axisX, axisY, game.ship);
 }
