@@ -1,23 +1,42 @@
 #include "Bullet.h"
 
-Bullet resetBullet(Vector2 pos)
+Bullet newBullet()
 {
 	Bullet bul{};
 
-	bul.pos = pos;
+	bul.pos = {0, 0};
 	bul.vel = { 0, 0 };
+	bul.sprite = LoadTexture("res/laser.png");
 	bul.speed = 500;
 	bul.hit = false;
+	bul.loaded = true;
 	bul.lifeSpan = 2;
 	bul.curLife = bul.lifeSpan;
 
 	return bul;
 }
 
+void resetBullet(Vector2 pos, Bullet& bul)
+{
+	bul.pos = pos;
+	bul.vel = { 0, 0 };
+	bul.speed = 500;
+	bul.hit = false;
+	bul.loaded = true;
+	bul.lifeSpan = 2;
+	bul.curLife = bul.lifeSpan;
+}
+
 void fireBullet(Vector2 pos, Bullet& bul)
 {
+	resetBullet(pos, bul);
+
 	Vector2 vel = normalizeVector({ (float)GetMouseX() - pos.x, (float)GetMouseY() - pos.y });
-	bul = { pos, vel, bul.speed, false, bul.lifeSpan, 0 };
+
+	bul.vel = vel;
+	bul.hit = false;
+	bul.loaded = false;
+	bul.curLife = 0;
 }
 
 void moveBullet(Bullet& bul)
@@ -39,5 +58,10 @@ void moveBullet(Bullet& bul)
 
 void drawBullet(Bullet bul)
 {
-	DrawCircleV(bul.pos, 3, RED);
+	const Vector2 size = { 9, 54 };
+	Rectangle dest = { bul.pos.x - size.x / 2, bul.pos.y - size.y / 2, size.x, size.y };
+
+	float rot = getRotation(bul.vel);
+
+	DrawTexturePro(bul.sprite, { 0, 0, size.x, size.y }, dest, { size.x / 2, size.y / 2 }, rot, WHITE);
 }

@@ -220,7 +220,13 @@ Vector2 normalizeVector(Vector2 vec)
 
 float getRotation(Vector2 dir)
 {
-	float rot = 0;
+	float rot = atan(dir.y / dir.x);
 
+	rot = rot * 180 / PI;
 
+	if (dir.x < 0)
+		rot += 180;
+
+	rot += 90;
+	return rot;
 }

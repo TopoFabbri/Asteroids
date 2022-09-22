@@ -4,31 +4,44 @@ Game newGame()
 {
 	return
 	{
-		Scenes::Game,
+		newSettings(),
 		newShip(),
-		false
+		false,
+		createMenu()
 	};
 }
 
 void loop(Game& game)
 {
-	while (game.scene != Scenes::Exit)
+	while (game.settings.scene != Scene::Exit)
 	{
 		if (WindowShouldClose())
-			game.scene = Scenes::Exit;
+			game.settings.scene = Scene::Exit;
 
-		switch (game.scene)
+		switch (game.settings.scene)
 		{
-		case Scenes::Exit:
+		case Scene::Exit:
 
 			break;
 
-		case Scenes::Menu:
-
+		case Scene::MainMenu:
+			mainMenu(game.settings, game.mainMenu);
 			break;
 
-		case Scenes::Game:
+		case Scene::Game:
 			play(game);
+			break;
+
+		case Scene::SettingsMenu:
+			settingsMenu(game.settings, game.settingsMenu);
+			break;
+
+		case Scene::ControlsMenu:
+			controlsMenu(game.settings, game.controlsMenu);
+			break;
+
+		case Scene::Credits:
+			creditsMenu(game.settings, game.credits);
 			break;
 
 		default:;
@@ -48,7 +61,6 @@ void begin(Game& game)
 	if (!game.isPlaying)
 	{
 		game.isPlaying = true;
-		game.ship = newShip();
 	}
 }
 
@@ -86,7 +98,18 @@ void input(Game& game)
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 	{
-		fireBullet(game.ship.pos, game.ship.bul);
+		game.ship.bulletCount = 0;
+
+		for (int i = 0; i < game.ship.maxBullets; i++)
+		{
+			game.ship.bulletCount = i;
+
+			if (game.ship.bul[game.ship.bulletCount].loaded)
+				break;
+		}
+
+		if (game.ship.bul[game.ship.bulletCount].loaded)
+			fireBullet(game.ship.pos, game.ship.bul[game.ship.bulletCount]);
 	}
 
 	accelerateShip(axisX, axisY, game.ship);

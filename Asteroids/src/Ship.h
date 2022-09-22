@@ -5,15 +5,19 @@
 
 struct Ship
 {
+	static const int maxBullets = 5;
+
 	Vector2 pos;
 	Vector2 vel;
 	Color color;
-	Bullet bul;
+	Bullet bul[maxBullets];
 	Texture2D sprite;
+	int bulletCount;
 	float accel;
 	float speed;
 	float size;
 	float rot;
+	float maxSpeed;
 };
 
 Ship newShip();

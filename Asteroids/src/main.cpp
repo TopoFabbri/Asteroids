@@ -21,5 +21,7 @@ void runProgram()
 void defaults()
 {
     srand(time(nullptr));
-    InitWindow(800, 800, "Asteroids - Topo");
+    InitWindow(1920, 1080, "Asteroids - Topo");
+
+    ClearBackground(BLACK);
 }

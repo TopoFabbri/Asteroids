@@ -2,19 +2,18 @@
 
 #include "Topo.h"
 #include "Ship.h"
-
-enum class Scenes
-{
-	Exit,
-	Menu,
-	Game
-};
+#include "Settings.h"
+#include "Menu.h"
 
 struct Game
 {
-	Scenes scene;
+	Settings settings;
 	Ship ship;
 	bool isPlaying;
+	Menu mainMenu;
+	Menu settingsMenu;
+	Menu controlsMenu;
+	Menu credits;
 };
 
 Game newGame();
