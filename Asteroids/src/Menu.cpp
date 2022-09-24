@@ -7,6 +7,8 @@ Menu createMenu()
 	menu.isActive = false;
 	menu.title = "Menu";
 	menu.titlePos = { 0, 0 };
+	menu.btnQty = menu.maxBtns;
+	menu.chkBxQty = menu.maxChkBxs;
 	for (int i = 0; i < menu.btnQty; i++)
 	{
 		menu.btn[i] = createButton();
@@ -83,7 +85,7 @@ void takeInput(Menu& menu, Settings& gSettings)
 	if (isButtonPressed(menu.btn[4]))
 		gSettings.scene = Scene::Credits;
 
-	if (isButtonPressed(menu.btn[0]))
+	if (isButtonPressed(menu.btn[0]) || IsKeyPressed(KEY_SPACE))
 	{
 		gSettings.scene = Scene::Game;
 		menu.isActive = false;
@@ -176,8 +178,6 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 	}
 
 	// Update
-	if (WindowShouldClose())
-		CloseWindow();
 	if (isButtonPressed(ui.btn[1]))
 	{
 		ui.isActive = false;

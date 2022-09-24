@@ -5,9 +5,17 @@ void drawCircleCir(Circle circle, Color color)
 	DrawCircleV(circle.center, circle.radius, color);
 }
 
+bool circlesCollide(Circle cir1, Circle cir2)
+{
+	float dist = getLength({ cir1.center, cir2.center });
+
+	return dist < cir1.radius + cir2.radius;
+}
+
 Vector2 getCirclesCollisionPos(Circle circ1, Circle circ2)
 {
 	Vector2 midPoint;
+
 	midPoint.x = (circ1.center.x + circ2.center.x) / 2;
 	midPoint.y = (circ1.center.y + circ2.center.y) / 2;
 
@@ -216,6 +224,14 @@ Vector2 normalizeVector(Vector2 vec)
 	float mag = getVectorMagnitude(vec);
 
 	return { vec.x / mag, vec.y / mag };
+}
+
+void setVectorLength(Vector2& vec, float length)
+{
+	vec = normalizeVector(vec);
+
+	vec.x *= length;
+	vec.y *= length;
 }
 
 float getRotation(Vector2 dir)

@@ -2,13 +2,23 @@
 
 Game newGame()
 {
-	return
+	Game game;
+
+	game.settings = newSettings();
+	game.ship = newShip();
+	game.isPlaying = false;
+	game.mainMenu = createMenu();
+	game.settingsMenu = createMenu();
+	game.controlsMenu = createMenu();
+	game.credits = createMenu();
+	game.bg = LoadTexture("res/Space.png");
+
+	for (int i = 0; i < Game::maxAst; i++)
 	{
-		newSettings(),
-		newShip(),
-		false,
-		createMenu()
-	};
+		newAsteroid(game.ast[i]);
+	}
+
+	return game;
 }
 
 void loop(Game& game)
@@ -51,8 +61,13 @@ void loop(Game& game)
 
 void play(Game& game)
 {
+	// Begin
 	begin(game);
+
+	// Update
 	update(game);
+
+	// Draw
 	draw(game);
 }
 
@@ -69,14 +84,33 @@ void update(Game& game)
 	input(game);
 	moveShip(game.ship);
 	shipPortal(game.ship);
+	checkCollisions(game);
+
+	for (int i = 0; i < game.maxAst; i++)
+	{
+		moveAsteroid(game.ast[i]);
+		portalAsteroids(game.ast[i]);
+		updateCounter(game.ast[i]);
+	}
 }
 
 void draw(Game& game)
 {
+	Rectangle bgSource{ 0, 0, (float)game.bg.width, (float)game.bg.height };
+	Rectangle bgDest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+
 	BeginDrawing();
-	ClearBackground(BLACK);
+	DrawTexturePro(game.bg, bgSource, bgDest, { 0, 0 }, 0, WHITE);
+
+	for (int i = 0; i < game.maxAst; i++)
+	{
+		drawAsteroid(game.ast[i]);
+	}
 
 	drawShip(game.ship);
+
+	if (game.settings.drawFps)
+		DrawFPS(10, 10);
 
 	EndDrawing();
 }
@@ -112,5 +146,25 @@ void input(Game& game)
 			fireBullet(game.ship.pos, game.ship.bul[game.ship.bulletCount]);
 	}
 
+	if (IsKeyPressed(KEY_SPACE))
+		game.settings.scene = Scene::MainMenu;
+
 	accelerateShip(axisX, axisY, game.ship);
+}
+
+void checkCollisions(Game& game)
+{
+	for (int i = 0; i < game.maxAst; i++)
+	{
+		checkAsteroidCollision(game.ast[i], { game.ship.pos, game.ship.size });
+
+		for (int j = 0; j < game.ship.maxBullets; j++)
+		{
+			if (!game.ship.bul[j].loaded)
+			{
+				if (checkAsteroidCollision(game.ast[i], { game.ship.bul[j].pos, game.ship.bul[j].size }))
+					resetBullet(game.ship.pos, game.ship.bul[j]);
+			}
+		}
+	}
 }

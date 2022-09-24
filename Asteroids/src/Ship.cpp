@@ -39,11 +39,6 @@ void moveShip(Ship& ship)
 	updateRotation(ship);
 }
 
-void updateRotation(Ship& ship)
-{
-	ship.rot = getRotation({ (float)GetMouseX() - ship.pos.x, (float)GetMouseY() - ship.pos.y });
-}
-
 void accelerateShip(float axisX, float axisY, Ship& ship)
 {
 	Vector2 newVel = ship.vel;
@@ -51,10 +46,16 @@ void accelerateShip(float axisX, float axisY, Ship& ship)
 	newVel.x += axisX * ship.accel * GetFrameTime();
 	newVel.y += axisY * ship.accel * GetFrameTime();
 
-	if (getVectorMagnitude(newVel) >= ship.maxSpeed)
-		return;
-	else
-		ship.vel = newVel;
+	if (newVel.x <= ship.maxSpeed)
+		ship.vel.x = newVel.x;
+
+	if (newVel.y <= ship.maxSpeed)
+		ship.vel.y = newVel.y;
+}
+
+void updateRotation(Ship& ship)
+{
+	ship.rot = getRotation({ (float)GetMouseX() - ship.pos.x, (float)GetMouseY() - ship.pos.y });
 }
 
 void drawShip(Ship ship)

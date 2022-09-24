@@ -11,6 +11,7 @@ struct Bullet
 	bool loaded;
 	float lifeSpan;
 	float curLife;
+	float size;
 };
 
 Bullet newBullet();

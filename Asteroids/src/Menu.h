@@ -3,12 +3,6 @@
 #include "CheckBox.h"
 #include "Settings.h"
 
-struct Checkboxes
-{
-	CheckBox showFPS;
-	CheckBox AI;
-};
-
 struct Menu
 {
 	static const int maxBtns = 10;

@@ -39,6 +39,9 @@
     <ClInclude Include="src\CheckBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Asteroid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Topo.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\CheckBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Asteroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

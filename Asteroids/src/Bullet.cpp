@@ -12,6 +12,7 @@ Bullet newBullet()
 	bul.loaded = true;
 	bul.lifeSpan = 2;
 	bul.curLife = bul.lifeSpan;
+	bul.size = 9;
 
 	return bul;
 }
@@ -64,4 +65,5 @@ void drawBullet(Bullet bul)
 	float rot = getRotation(bul.vel);
 
 	DrawTexturePro(bul.sprite, { 0, 0, size.x, size.y }, dest, { size.x / 2, size.y / 2 }, rot, WHITE);
+	DrawCircleLines((int)bul.pos.x, (int)bul.pos.y, bul.size, RED);
 }

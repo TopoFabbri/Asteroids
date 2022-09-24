@@ -22,7 +22,7 @@ struct Ship
 
 Ship newShip();
 void moveShip(Ship& ship);
-void updateRotation(Ship& ship);
 void accelerateShip(float axisX, float axisY, Ship& ship);
+void updateRotation(Ship& ship);
 void drawShip(Ship ship);
 void shipPortal(Ship& ship);

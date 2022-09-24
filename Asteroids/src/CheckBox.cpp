@@ -2,7 +2,7 @@
 
 CheckBox createCheckbox()
 {
-	CheckBox cb;
+	CheckBox cb{};
 
 	cb.rec = { 0, 0, 25, 25 };
 	cb.checked = false;
