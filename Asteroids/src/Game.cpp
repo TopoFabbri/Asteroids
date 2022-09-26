@@ -82,9 +82,9 @@ void begin(Game& game)
 void update(Game& game)
 {
 	input(game);
+	checkCollisions(game);
 	moveShip(game.ship);
 	shipPortal(game.ship);
-	checkCollisions(game);
 
 	for (int i = 0; i < game.maxAst; i++)
 	{
@@ -120,8 +120,11 @@ void input(Game& game)
 	float axisX = 0;
 	float axisY = 0;
 
+	shipAnimator(game.ship);
+
 	if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
 	{
+
 		Vector2 moveDir = { (float)GetMouseX(), (float)GetMouseY() };
 
 		moveDir = normalizeVector({ moveDir.x - game.ship.pos.x, moveDir.y - game.ship.pos.y });
@@ -130,7 +133,7 @@ void input(Game& game)
 		axisY = moveDir.y;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 	{
 		game.ship.bulletCount = 0;
 
@@ -156,7 +159,16 @@ void checkCollisions(Game& game)
 {
 	for (int i = 0; i < game.maxAst; i++)
 	{
-		checkAsteroidCollision(game.ast[i], { game.ship.pos, game.ship.size });
+		if (checkAsteroidCollision(game.ast[i], { game.ship.pos, game.ship.size }))
+			collideShip(game.ast[i], game.ship);
+
+		for (int j = i; j < game.maxAst; j++)
+		{
+			if (i == j)
+				continue;
+
+			checkAsteroidsCollision(game.ast[i], game.ast[j]);
+		}
 
 		for (int j = 0; j < game.ship.maxBullets; j++)
 		{
@@ -167,4 +179,32 @@ void checkCollisions(Game& game)
 			}
 		}
 	}
+}
+
+void collideShip(Asteroid& ast, Ship& ship)
+{
+	Vector2 colPos{};
+
+	if (ast.big.active && circlesCollide({ ast.big.pos, ast.big.size }, { ship.pos, ship.size }))
+		colPos = getCirclesCollisionPos({ ast.big.pos, ast.big.size }, { ship.pos, ship.size });
+
+	for (int i = 0; i < 2; i++)
+	{
+		if (ast.med[i].active && circlesCollide({ ast.med[i].pos, ast.med[i].size }, { ship.pos, ship.size }))
+			colPos = getCirclesCollisionPos({ ast.med[i].pos, ast.med[i].size }, { ship.pos, ship.size });
+
+		for (int j = 0; j < 2; j++)
+		{
+			if (ast.small[i][j].active && circlesCollide({ ast.small[i][j].pos, ast.small[i][j].size }, { ship.pos, ship.size }))
+				colPos = getCirclesCollisionPos({ ast.small[i][j].pos, ast.small[i][j].size }, { ship.pos, ship.size });
+		}
+	}
+
+	float rock1Speed = ast.big.speed;
+
+	Vector2 newVel = normalizeVector({ ship.pos.x - colPos.x, ship.pos.y - colPos.y });
+	//ship.speed = rock1Speed;
+	ship.vel.x = newVel.x;
+	ship.vel.y = newVel.y;
+	setVectorLength(ship.vel, rock1Speed);
 }

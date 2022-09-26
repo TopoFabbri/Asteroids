@@ -28,3 +28,4 @@ void update(Game& game);
 void draw(Game& game);
 void input(Game& game);
 void checkCollisions(Game& game);
+void collideShip(Asteroid& ast, Ship& ship);

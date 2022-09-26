@@ -11,6 +11,10 @@ struct Ship
 	Vector2 vel;
 	Color color;
 	Bullet bul[maxBullets];
+	Texture2D spriteNone;
+	Texture2D spriteFire;
+	Texture2D spriteMove;
+	Texture2D spriteBoth;
 	Texture2D sprite;
 	int bulletCount;
 	float accel;
@@ -18,6 +22,7 @@ struct Ship
 	float size;
 	float rot;
 	float maxSpeed;
+	int lives;
 };
 
 Ship newShip();
@@ -26,3 +31,4 @@ void accelerateShip(float axisX, float axisY, Ship& ship);
 void updateRotation(Ship& ship);
 void drawShip(Ship ship);
 void shipPortal(Ship& ship);
+void shipAnimator(Ship& ship);

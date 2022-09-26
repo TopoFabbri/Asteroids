@@ -13,12 +13,17 @@ Ship newShip()
 		ship.bul[i] = newBullet();
 	}
 
-	ship.sprite = LoadTexture("res/Pjship.png");
+	ship.spriteNone = LoadTexture("res/Ship.png");
+	ship.spriteFire = LoadTexture("res/ShipFire.png");
+	ship.spriteMove = LoadTexture("res/ShipMove.png");
+	ship.spriteBoth = LoadTexture("res/ShipBoth.png");
+	ship.sprite = ship.spriteNone;
 	ship.accel = 200;
 	ship.speed = 1;
-	ship.size = 25;
+	ship.size = 30;
 	ship.rot = 0;
 	ship.maxSpeed = 1000;
+	ship.lives = 3;
 
 	return ship;
 }
@@ -60,10 +65,8 @@ void updateRotation(Ship& ship)
 
 void drawShip(Ship ship)
 {
-	Rectangle source = { 0, 0, 98, 75 };
-	Rectangle dest = { ship.pos.x - ship.size / 2, ship.pos.y - ship.size / 2, ship.size * 2, ship.size * 2 };
-
-	//DrawLineV({ ship.pos.x + ship.size / 2, ship.pos.y + ship.size / 2 }, GetMousePosition(), RED);
+	Rectangle source = { 0, 0, (float)ship.sprite.width, (float)ship.sprite.height };
+	Rectangle dest = { ship.pos.x, ship.pos.y, ship.size * 2, ship.size * 2 };
 
 	for (int i = 0; i < ship.maxBullets; i++)
 	{
@@ -71,6 +74,7 @@ void drawShip(Ship ship)
 	}
 
 	DrawTexturePro(ship.sprite, source, dest, { dest.width / 2, dest.height / 2 }, ship.rot, WHITE);
+	//DrawCircleLines((int)ship.pos.x, (int)ship.pos.y, ship.size, WHITE);
 }
 
 void shipPortal(Ship& ship)
@@ -84,4 +88,16 @@ void shipPortal(Ship& ship)
 		ship.pos.y = (float)GetScreenHeight();
 	else if (ship.pos.y >= (float)GetScreenHeight())
 		ship.pos.y = 0;
+}
+
+void shipAnimator(Ship& ship)
+{
+	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
+		ship.sprite = ship.spriteBoth;
+	else if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
+		ship.sprite = ship.spriteMove;
+	else if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+		ship.sprite = ship.spriteFire;
+	else
+		ship.sprite = ship.spriteNone;
 }

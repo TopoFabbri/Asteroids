@@ -12,7 +12,7 @@ Bullet newBullet()
 	bul.loaded = true;
 	bul.lifeSpan = 2;
 	bul.curLife = bul.lifeSpan;
-	bul.size = 9;
+	bul.size = 3;
 
 	return bul;
 }
@@ -60,7 +60,7 @@ void moveBullet(Bullet& bul)
 void drawBullet(Bullet bul)
 {
 	const Vector2 size = { 9, 54 };
-	Rectangle dest = { bul.pos.x - size.x / 2, bul.pos.y - size.y / 2, size.x, size.y };
+	Rectangle dest = { bul.pos.x, bul.pos.y, size.x, size.y };
 
 	float rot = getRotation(bul.vel);
 

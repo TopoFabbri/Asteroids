@@ -16,6 +16,9 @@ struct Rock
 	float size;
 	bool active;
 	float ghostCounter;
+	float speed;
+	float rot;
+	float rotSpeed;
 
 	State state;
 	Vector2 vel;
@@ -35,7 +38,11 @@ void newAsteroid(Asteroid& ast);
 void moveAsteroid(Asteroid& ast);
 void portalAsteroids(Asteroid& ast);
 bool checkAsteroidCollision(Asteroid& ast, Circle cir);
+void checkAsteroidsCollision(Asteroid& ast1, Asteroid& ast2);
+void collideRocks(Rock& rock1, Rock& rock2);
 void collideBigAsteroid(Asteroid& ast);
 void collideMidAsteroid(Asteroid& ast, int i);
 void drawAsteroid(Asteroid ast);
 void updateCounter(Asteroid& ast);
+void updateRotation(Rock& rock);
+void randomRotSpeed(float& rotSpeed);
