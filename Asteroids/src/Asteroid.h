@@ -36,6 +36,7 @@ struct Asteroid
 void newRock(Rock& rock, Rock::State state);
 void newAsteroid(Asteroid& ast);
 void moveAsteroid(Asteroid& ast);
+bool asteroidDestroyed(Asteroid& ast);
 void portalAsteroids(Asteroid& ast);
 bool checkAsteroidCollision(Asteroid& ast, Circle cir);
 void checkAsteroidsCollision(Asteroid& ast1, Asteroid& ast2);

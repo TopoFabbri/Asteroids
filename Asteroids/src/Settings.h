@@ -7,7 +7,8 @@ enum class Scene
 	MainMenu,
 	SettingsMenu,
 	ControlsMenu,
-	Credits
+	Credits,
+	Pause
 };
 
 struct Settings

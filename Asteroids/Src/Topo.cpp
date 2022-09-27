@@ -7,15 +7,17 @@ void drawCircleCir(Circle circle, Color color)
 
 bool circlesCollide(Circle cir1, Circle cir2)
 {
-	float dist = getLength({ cir1.center, cir2.center });
+	float distance = getLength({ cir1.center, cir2.center });
 
-	return dist < cir1.radius + cir2.radius;
+	if (distance <= cir1.radius + cir2.radius)
+		return true;
+
+	return false;
 }
 
 Vector2 getCirclesCollisionPos(Circle circ1, Circle circ2)
 {
 	Vector2 midPoint;
-
 	midPoint.x = (circ1.center.x + circ2.center.x) / 2;
 	midPoint.y = (circ1.center.y + circ2.center.y) / 2;
 
@@ -58,6 +60,11 @@ float getLength(Line segment)
 {
 	return sqrtf((segment.start.x - segment.end.x) * (segment.start.x - segment.end.x) +
 		(segment.start.y - segment.end.y) * (segment.start.y - segment.end.y));
+}
+
+void drawRectangleRecLines(Rectangle rec, Color color)
+{
+	DrawRectangleLines((int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height, color);
 }
 
 float getDistanceV3(Segment3D segment)
@@ -214,6 +221,11 @@ Vector2 getCircleRecCollisionPos(Rectangle rec, Circle circ)
 	return colPos;
 }
 
+float getDotProduct(Vector2 a, Vector2 b)
+{
+	return (a.x * b.x + a.y * b.y);
+}
+
 float getVectorMagnitude(Vector2 vec)
 {
 	return sqrtf(std::powf(vec.x, 2) + std::powf(vec.y, 2));
@@ -232,6 +244,14 @@ void setVectorLength(Vector2& vec, float length)
 
 	vec.x *= length;
 	vec.y *= length;
+}
+
+Vector2 getVectorPoint(float y, Vector2 vec)
+{
+	vec.x = y / (vec.y / vec.x);
+	vec.y = y;
+
+	return vec;
 }
 
 float getRotation(Vector2 dir)

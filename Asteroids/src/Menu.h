@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "CheckBox.h"
 #include "Settings.h"
+#include "Topo.h"
 
 struct Menu
 {
@@ -28,3 +29,4 @@ void controlsMenu(Settings& gSettings, Menu& ui);
 void controlsMenuUpdate(Menu& ui, Settings& gSettings);
 void settingsMenu(Settings& gSettings, Menu& ui);
 void creditsMenu(Settings& gSettings, Menu& ui);
+void pauseMenu(Settings& gSettings, Menu& ui);

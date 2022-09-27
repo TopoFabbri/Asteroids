@@ -26,8 +26,6 @@ void mainMenu(Settings& gSettings, Menu& mMenu)
 {
 	if (!mMenu.isActive)
 	{
-		TakeScreenshot("PauseScreen.png");
-		mMenu.bg = LoadTextureFromImage(LoadImage("PauseScreen.png"));
 		mMenu.title = "Main Menu";
 		mMenu.isActive = true;
 		mMenu.btn[0].text = "Play";
@@ -52,7 +50,6 @@ void draw(Menu menu)
 	BeginDrawing();
 
 	ClearBackground(BLACK);
-	DrawTexture(menu.bg, 0, 0, WHITE);
 
 	DrawText(menu.title, (int)menu.titlePos.x, (int)menu.titlePos.y, 50, WHITE);
 	drawButton(menu.btn[0]);
@@ -85,7 +82,7 @@ void takeInput(Menu& menu, Settings& gSettings)
 	if (isButtonPressed(menu.btn[4]))
 		gSettings.scene = Scene::Credits;
 
-	if (isButtonPressed(menu.btn[0]) || IsKeyPressed(KEY_SPACE))
+	if (isButtonPressed(menu.btn[0]))
 	{
 		gSettings.scene = Scene::Game;
 		menu.isActive = false;
@@ -211,8 +208,18 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 
 void creditsMenu(Settings& gSettings, Menu& ui)
 {
+	Vector2 popInd{ (float)GetScreenWidth() / 8, 0 };
+	const Rectangle backImage{ popInd.x, popInd.y,
+		6 * popInd.x, (float)GetScreenHeight() };
+
+	const char* credits[6] = { "Programing:", "Topo","", "Art:", "Chia", "Kenney" };
+	const Color color[6] = { WHITE, WHITE, BLACK, RED, RED, RED };
+	int posY = GetScreenHeight() / 2 - 50 * 3;
+
 	if (!ui.isActive)
 	{
+		TakeScreenshot("PauseScreen.png");
+		ui.bg = LoadTextureFromImage(LoadImage("PauseScreen.png"));
 		ui.title = "Credits";
 		ui.isActive = true;
 		ui.btn[1].text = "Back";
@@ -223,16 +230,73 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 	updateButtons(ui);
 
 	if (isButtonPressed(ui.btn[1]))
+	{
 		gSettings.scene = Scene::MainMenu;
+		ui.isActive = false;
+	}
 
 	// Draw
 	BeginDrawing();
 
 	ClearBackground(BLACK);
 
+	DrawTexture(ui.bg, 0, 0, WHITE);
+	DrawRectangleRec(backImage, BLACK);
+	drawRectangleRecLines(backImage, WHITE);
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawButton(ui.btn[1]);
-	DrawText("Mateo Fabbri", GetScreenWidth() / 2 - MeasureText("Mateo Fabbri", 50) / 2, GetScreenHeight() / 2, 50, WHITE);
+
+	for (int i = 0; i < 6; i++)
+	{
+		DrawText(credits[i], GetScreenWidth() / 2 - MeasureText(credits[i], 50) / 2, posY, 50, color[i]);
+		posY += 50;
+	}
+
+	EndDrawing();
+}
+
+void pauseMenu(Settings& gSettings, Menu& ui)
+{
+	Vector2 popInd{ (float)GetScreenWidth() / 8, 0 };
+	const Rectangle backImage{ popInd.x, popInd.y,
+		6 * popInd.x, (float)GetScreenHeight() };
+
+
+	if (!ui.isActive)
+	{
+		TakeScreenshot("PauseScreen.png");
+		ui.bg = LoadTextureFromImage(LoadImage("PauseScreen.png"));
+		ui.title = "Pause";
+		ui.isActive = true;
+		ui.btn[1].text = "Main Menu";
+		ui.btn[0].text = "Play";
+	}
+
+	// Update
+	positionTitle(ui);
+	updateButtons(ui);
+
+	if (isButtonPressed(ui.btn[1]))
+	{
+		gSettings.scene = Scene::MainMenu;
+		ui.isActive = false;
+	}
+
+	if (isButtonPressed(ui.btn[0]) || IsKeyPressed(KEY_SPACE))
+	{
+		gSettings.scene = Scene::Game;
+		ui.isActive = false;
+	}
+
+	// Draw
+	BeginDrawing();
+
+	ClearBackground(BLACK);
+
+	DrawTexture(ui.bg, 0, 0, WHITE);
+	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
+	drawButton(ui.btn[0]);
+	drawButton(ui.btn[1]);
 
 	EndDrawing();
 }

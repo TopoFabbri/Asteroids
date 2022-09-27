@@ -85,6 +85,28 @@ void moveAsteroid(Asteroid& ast)
 	}
 }
 
+bool asteroidDestroyed(Asteroid& ast)
+{
+	bool destroyed = true;
+
+	if (ast.big.active)
+		destroyed = false;
+
+	for (int i = 0; i < 2; i++)
+	{
+		if (ast.med[i].active)
+			destroyed = false;
+
+		for (int j = 0; j < 2; j++)
+		{
+			if (ast.small[i][j].active)
+				destroyed = false;
+		}
+	}
+
+	return destroyed;
+}
+
 void portalAsteroids(Asteroid& ast)
 {
 	if (ast.big.pos.x <= 0)

@@ -54,6 +54,10 @@ void loop(Game& game)
 			creditsMenu(game.settings, game.credits);
 			break;
 
+		case Scene::Pause:
+			pauseMenu(game.settings, game.credits);
+			break;
+
 		default:;
 		}
 	}
@@ -76,6 +80,12 @@ void begin(Game& game)
 	if (!game.isPlaying)
 	{
 		game.isPlaying = true;
+		game.ship = newShip();
+
+		for (int i = 0; i < Game::maxAst; i++)
+		{
+			newAsteroid(game.ast[i]);
+		}
 	}
 }
 
@@ -91,6 +101,14 @@ void update(Game& game)
 		moveAsteroid(game.ast[i]);
 		portalAsteroids(game.ast[i]);
 		updateCounter(game.ast[i]);
+		if (asteroidDestroyed(game.ast[i]))
+			game.ast[i].big.active = true;
+	}
+
+	if (isGameOver(game))
+	{
+		game.settings.scene = Scene::Credits;
+		game.isPlaying = false;
 	}
 }
 
@@ -124,10 +142,11 @@ void input(Game& game)
 
 	if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
 	{
+		Vector2 moveDir = GetMousePosition();
+		moveDir.x -= game.ship.pos.x;
+		moveDir.y -= game.ship.pos.y;
 
-		Vector2 moveDir = { (float)GetMouseX(), (float)GetMouseY() };
-
-		moveDir = normalizeVector({ moveDir.x - game.ship.pos.x, moveDir.y - game.ship.pos.y });
+		moveDir = normalizeVector(moveDir);
 
 		axisX = moveDir.x;
 		axisY = moveDir.y;
@@ -146,11 +165,26 @@ void input(Game& game)
 		}
 
 		if (game.ship.bul[game.ship.bulletCount].loaded)
+		{
 			fireBullet(game.ship.pos, game.ship.bul[game.ship.bulletCount]);
+
+			Vector2 fireDir = GetMousePosition();
+			fireDir.x -= game.ship.pos.x;
+			fireDir.y -= game.ship.pos.y;
+
+			fireDir = normalizeVector(fireDir);
+
+			if (abs(game.ship.vel.x - fireDir.x * game.ship.recoil) <= game.ship.maxSpeed)
+				game.ship.vel.x -= fireDir.x * game.ship.recoil;
+
+			if (abs(game.ship.vel.y - fireDir.y * game.ship.recoil) <= game.ship.maxSpeed)
+				game.ship.vel.y -= fireDir.y * game.ship.recoil;
+
+		}
 	}
 
 	if (IsKeyPressed(KEY_SPACE))
-		game.settings.scene = Scene::MainMenu;
+		game.settings.scene = Scene::Pause;
 
 	accelerateShip(axisX, axisY, game.ship);
 }
@@ -185,6 +219,8 @@ void collideShip(Asteroid& ast, Ship& ship)
 {
 	Vector2 colPos{};
 
+	ship.lives--;
+
 	if (ast.big.active && circlesCollide({ ast.big.pos, ast.big.size }, { ship.pos, ship.size }))
 		colPos = getCirclesCollisionPos({ ast.big.pos, ast.big.size }, { ship.pos, ship.size });
 
@@ -203,8 +239,15 @@ void collideShip(Asteroid& ast, Ship& ship)
 	float rock1Speed = ast.big.speed;
 
 	Vector2 newVel = normalizeVector({ ship.pos.x - colPos.x, ship.pos.y - colPos.y });
-	//ship.speed = rock1Speed;
 	ship.vel.x = newVel.x;
 	ship.vel.y = newVel.y;
 	setVectorLength(ship.vel, rock1Speed);
+}
+
+bool isGameOver(Game& game)
+{
+	if (game.ship.lives <= 0)
+		return true;
+
+	return false;
 }

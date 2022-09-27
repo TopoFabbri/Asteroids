@@ -18,12 +18,13 @@ Ship newShip()
 	ship.spriteMove = LoadTexture("res/ShipMove.png");
 	ship.spriteBoth = LoadTexture("res/ShipBoth.png");
 	ship.sprite = ship.spriteNone;
-	ship.accel = 200;
-	ship.speed = 1;
+	ship.accel = 100;
+	ship.speed = 5;
 	ship.size = 30;
 	ship.rot = 0;
 	ship.maxSpeed = 1000;
 	ship.lives = 3;
+	ship.recoil = 20;
 
 	return ship;
 }
@@ -75,6 +76,7 @@ void drawShip(Ship ship)
 
 	DrawTexturePro(ship.sprite, source, dest, { dest.width / 2, dest.height / 2 }, ship.rot, WHITE);
 	//DrawCircleLines((int)ship.pos.x, (int)ship.pos.y, ship.size, WHITE);
+	drawShipLives(ship);
 }
 
 void shipPortal(Ship& ship)
@@ -100,4 +102,19 @@ void shipAnimator(Ship& ship)
 		ship.sprite = ship.spriteFire;
 	else
 		ship.sprite = ship.spriteNone;
+}
+
+void drawShipLives(Ship& ship)
+{
+	const int size = 60;
+	Rectangle source{ 0, 0, (float)ship.spriteNone.width, (float)ship.spriteNone.height };
+	Rectangle dest{ (float)GetScreenWidth() / 2 - (float)(size * ship.lives) / 2,
+		(float)size / 2, size, size };
+
+	for (int i = 0; i < ship.lives; i++)
+	{
+		DrawTexturePro(ship.spriteNone, source, dest, { (float)size / 2, (float)size / 2 }, 0, WHITE);
+		dest.x += size;
+	}
+
 }

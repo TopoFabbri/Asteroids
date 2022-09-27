@@ -5,7 +5,7 @@
 
 struct Ship
 {
-	static const int maxBullets = 5;
+	static const int maxBullets = 50;
 
 	Vector2 pos;
 	Vector2 vel;
@@ -23,6 +23,7 @@ struct Ship
 	float rot;
 	float maxSpeed;
 	int lives;
+	float recoil;
 };
 
 Ship newShip();
@@ -32,3 +33,4 @@ void updateRotation(Ship& ship);
 void drawShip(Ship ship);
 void shipPortal(Ship& ship);
 void shipAnimator(Ship& ship);
+void drawShipLives(Ship& ship);
