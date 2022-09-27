@@ -22,6 +22,7 @@ void defaults()
 {
     srand(time(nullptr));
     InitWindow(1920, 1080, "Asteroids - Topo");
+    SetExitKey(NULL);
 
     ClearBackground(BLACK);
 }

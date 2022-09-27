@@ -18,6 +18,8 @@ Game newGame()
 		newAsteroid(game.ast[i]);
 	}
 
+	game.score = 0;
+
 	return game;
 }
 
@@ -81,6 +83,7 @@ void begin(Game& game)
 	{
 		game.isPlaying = true;
 		game.ship = newShip();
+		game.score = 0;
 
 		for (int i = 0; i < Game::maxAst; i++)
 		{
@@ -120,12 +123,13 @@ void draw(Game& game)
 	BeginDrawing();
 	DrawTexturePro(game.bg, bgSource, bgDest, { 0, 0 }, 0, WHITE);
 
+	drawShip(game.ship);
+	DrawText(TextFormat("%i", game.score), GetScreenWidth() - MeasureText(TextFormat("%i", game.score) - 5, 30), 5, 30, YELLOW);
+
 	for (int i = 0; i < game.maxAst; i++)
 	{
 		drawAsteroid(game.ast[i]);
 	}
-
-	drawShip(game.ship);
 
 	if (game.settings.drawFps)
 		DrawFPS(10, 10);
@@ -179,11 +183,10 @@ void input(Game& game)
 
 			if (abs(game.ship.vel.y - fireDir.y * game.ship.recoil) <= game.ship.maxSpeed)
 				game.ship.vel.y -= fireDir.y * game.ship.recoil;
-
 		}
 	}
 
-	if (IsKeyPressed(KEY_SPACE))
+	if (IsKeyPressed(KEY_ESCAPE))
 		game.settings.scene = Scene::Pause;
 
 	accelerateShip(axisX, axisY, game.ship);
@@ -209,7 +212,10 @@ void checkCollisions(Game& game)
 			if (!game.ship.bul[j].loaded)
 			{
 				if (checkAsteroidCollision(game.ast[i], { game.ship.bul[j].pos, game.ship.bul[j].size }))
+				{
 					resetBullet(game.ship.pos, game.ship.bul[j]);
+					game.score += 10;
+				}
 			}
 		}
 	}

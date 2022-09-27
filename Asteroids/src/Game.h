@@ -18,6 +18,7 @@ struct Game
 	Menu credits;
 	Texture2D bg;
 	Asteroid ast[maxAst];
+	int score;
 };
 
 Game newGame();

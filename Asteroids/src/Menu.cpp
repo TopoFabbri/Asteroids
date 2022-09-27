@@ -282,7 +282,7 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 		ui.isActive = false;
 	}
 
-	if (isButtonPressed(ui.btn[0]) || IsKeyPressed(KEY_SPACE))
+	if (isButtonPressed(ui.btn[0]) || IsKeyPressed(KEY_ESCAPE))
 	{
 		gSettings.scene = Scene::Game;
 		ui.isActive = false;
