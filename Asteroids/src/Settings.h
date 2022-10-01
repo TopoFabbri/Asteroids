@@ -15,6 +15,8 @@ struct Settings
 {
 	Scene scene;
 	bool drawFps;
+	bool inverseSpawn;
+	bool showColiders;
 };
 
 Settings newSettings();

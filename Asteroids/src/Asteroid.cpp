@@ -1,5 +1,9 @@
 #include "Asteroid.h"
 
+Texture2D asteroidBig;
+Texture2D asteroidMed;
+Texture2D asteroidSmall;
+
 void newRock(Rock& rock, Rock::State state)
 {
 	switch (state)
@@ -7,19 +11,19 @@ void newRock(Rock& rock, Rock::State state)
 	case Rock::Big:
 		rock.size = 40;
 		rock.active = true;
-		rock.sprite = LoadTexture("res/AsteroidBig.png");
+		rock.sprite = asteroidBig;
 		break;
 
 	case Rock::Med:
 		rock.size = 20;
 		rock.active = false;
-		rock.sprite = LoadTexture("res/AsteroidMed.png");
+		rock.sprite = asteroidMed;
 		break;
 
 	case Rock::Small:
 		rock.size = 10;
 		rock.active = false;
-		rock.sprite = LoadTexture("res/AsteroidSmall.png");
+		rock.sprite = asteroidSmall;
 		break;
 
 	default:;

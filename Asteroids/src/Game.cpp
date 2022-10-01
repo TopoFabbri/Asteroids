@@ -1,17 +1,20 @@
 #include "Game.h"
 
+Texture2D space;
+
 Game newGame()
 {
 	Game game;
 
 	game.settings = newSettings();
 	game.ship = newShip();
+	game.planets[0] = newParallax(0.3f);
+	game.planets[1] = newParallax(0.6f);
 	game.isPlaying = false;
 	game.mainMenu = createMenu();
 	game.settingsMenu = createMenu();
 	game.controlsMenu = createMenu();
 	game.credits = createMenu();
-	game.bg = LoadTexture("res/Space.png");
 
 	for (int i = 0; i < Game::maxAst; i++)
 	{
@@ -68,7 +71,10 @@ void loop(Game& game)
 void play(Game& game)
 {
 	// Begin
-	begin(game);
+	if (!game.isPlaying)
+	{
+		begin(game);
+	}
 
 	// Update
 	update(game);
@@ -79,16 +85,14 @@ void play(Game& game)
 
 void begin(Game& game)
 {
-	if (!game.isPlaying)
-	{
-		game.isPlaying = true;
-		game.ship = newShip();
-		game.score = 0;
+	game.isPlaying = true;
+	loadTextures(game);
+	game.ship = newShip();
+	game.score = 0;
 
-		for (int i = 0; i < Game::maxAst; i++)
-		{
-			newAsteroid(game.ast[i]);
-		}
+	for (int i = 0; i < Game::maxAst; i++)
+	{
+		newAsteroid(game.ast[i]);
 	}
 }
 
@@ -98,6 +102,7 @@ void update(Game& game)
 	checkCollisions(game);
 	moveShip(game.ship);
 	shipPortal(game.ship);
+	parallax(game);
 
 	for (int i = 0; i < game.maxAst; i++)
 	{
@@ -121,15 +126,21 @@ void draw(Game& game)
 	Rectangle bgDest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
 
 	BeginDrawing();
+	ClearBackground(BLACK);
 	DrawTexturePro(game.bg, bgSource, bgDest, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(game.planets[0].image, bgSource, game.planets[0].dest, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(game.planets[1].image, bgSource, game.planets[1].dest, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(game.bgFog, bgSource, bgDest, { 0, 0 }, 0, WHITE);
 
-	drawShip(game.ship);
-	DrawText(TextFormat("%i", game.score), GetScreenWidth() - MeasureText(TextFormat("%i", game.score) - 5, 30), 5, 30, YELLOW);
+	drawShip(game.ship, game.settings.showColiders);
 
 	for (int i = 0; i < game.maxAst; i++)
 	{
 		drawAsteroid(game.ast[i]);
 	}
+
+	DrawText(TextFormat("%i", game.score), GetScreenWidth() - MeasureText(TextFormat("%i", game.score) - 5, 30),
+		5, 30, YELLOW);
 
 	if (game.settings.drawFps)
 		DrawFPS(10, 10);
@@ -247,7 +258,7 @@ void collideShip(Asteroid& ast, Ship& ship)
 	Vector2 newVel = normalizeVector({ ship.pos.x - colPos.x, ship.pos.y - colPos.y });
 	ship.vel.x = newVel.x;
 	ship.vel.y = newVel.y;
-	setVectorLength(ship.vel, rock1Speed);
+	setVectorLength(ship.vel, rock1Speed / ship.speed);
 }
 
 bool isGameOver(Game& game)
@@ -256,4 +267,42 @@ bool isGameOver(Game& game)
 		return true;
 
 	return false;
+}
+
+void parallax(Game& game)
+{
+	for (int i = 0; i < 2; i++)
+	{
+		Vector2 newPos = { game.planets[i].dest.x, game.planets[i].dest.y };
+
+		newPos.x -= game.ship.vel.x * GetFrameTime() * game.planets[i].mult;
+		newPos.y -= game.ship.vel.y * GetFrameTime() * game.planets[i].mult;
+
+		if (inRange(newPos.x, game.planets[i].minPos.x, game.planets[i].maxPos.x))
+			game.planets[i].dest.x = newPos.x;
+
+		if (inRange(newPos.y, game.planets[i].minPos.y, game.planets[i].maxPos.y))
+			game.planets[i].dest.y = newPos.y;
+	}
+}
+
+void loadTextures(Game& game)
+{
+	game.bg = LoadTexture("res/bgs/background1.png");
+	game.bgStars = LoadTexture("res/bgs/background2Stars.png");
+	game.planets[0].image = LoadTexture("res/bgs/background3PlanetLeft.png");
+	game.planets[1].image = LoadTexture("res/bgs/background3PlanetRight.png");
+	game.bgFog = LoadTexture("res/bgs/background4Fog.png");
+}
+
+Parallax newParallax(float mult)
+{
+	Parallax par{};
+
+	par.dest = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight(), };
+	par.minPos = { -100, -100 };
+	par.maxPos = { 100, 100 };
+	par.mult = mult;
+
+	return par;
 }

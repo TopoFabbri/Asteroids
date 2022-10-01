@@ -18,4 +18,4 @@ Bullet newBullet();
 void resetBullet(Vector2 pos, Bullet& bul);
 void fireBullet(Vector2 pos, Bullet& bul);
 void moveBullet(Bullet& bul);
-void drawBullet(Bullet bul);
+void drawBullet(Bullet bul, bool showColliders);

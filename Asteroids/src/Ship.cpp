@@ -1,5 +1,10 @@
 #include "Ship.h"
 
+Texture2D shipNone;
+Texture2D shipFire;
+Texture2D shipMove;
+Texture2D shipBoth;
+
 Ship newShip()
 {
 	Ship ship{};
@@ -13,10 +18,10 @@ Ship newShip()
 		ship.bul[i] = newBullet();
 	}
 
-	ship.spriteNone = LoadTexture("res/Ship.png");
-	ship.spriteFire = LoadTexture("res/ShipFire.png");
-	ship.spriteMove = LoadTexture("res/ShipMove.png");
-	ship.spriteBoth = LoadTexture("res/ShipBoth.png");
+	ship.spriteNone = shipNone;
+	ship.spriteFire = shipFire;
+	ship.spriteMove = shipMove;
+	ship.spriteBoth = shipBoth;
 	ship.sprite = ship.spriteNone;
 	ship.accel = 100;
 	ship.speed = 5;
@@ -64,32 +69,45 @@ void updateRotation(Ship& ship)
 	ship.rot = getRotation({ (float)GetMouseX() - ship.pos.x, (float)GetMouseY() - ship.pos.y });
 }
 
-void drawShip(Ship ship)
+void drawShip(Ship ship, bool showColliders)
 {
 	Rectangle source = { 0, 0, (float)ship.sprite.width, (float)ship.sprite.height };
 	Rectangle dest = { ship.pos.x, ship.pos.y, ship.size * 2, ship.size * 2 };
 
 	for (int i = 0; i < ship.maxBullets; i++)
 	{
-		drawBullet(ship.bul[i]);
+		drawBullet(ship.bul[i], showColliders);
 	}
 
 	DrawTexturePro(ship.sprite, source, dest, { dest.width / 2, dest.height / 2 }, ship.rot, WHITE);
-	//DrawCircleLines((int)ship.pos.x, (int)ship.pos.y, ship.size, WHITE);
+	if (showColliders)
+		DrawCircleLines((int)ship.pos.x, (int)ship.pos.y, ship.size, WHITE);
 	drawShipLives(ship);
 }
 
 void shipPortal(Ship& ship)
 {
 	if (ship.pos.x <= 0)
+	{
 		ship.pos.x = (float)GetScreenWidth();
+		ship.pos.y = (float)GetScreenHeight() - ship.pos.y;
+	}
 	else if (ship.pos.x >= (float)GetScreenWidth())
+	{
 		ship.pos.x = 0;
+		ship.pos.y = (float)GetScreenHeight() - ship.pos.y;
+	}
 
 	if (ship.pos.y <= 0)
+	{
 		ship.pos.y = (float)GetScreenHeight();
+		ship.pos.x = (float)GetScreenWidth() - ship.pos.x;
+	}
 	else if (ship.pos.y >= (float)GetScreenHeight())
+	{
 		ship.pos.y = 0;
+		ship.pos.x = (float)GetScreenWidth() - ship.pos.x;
+	}
 }
 
 void shipAnimator(Ship& ship)

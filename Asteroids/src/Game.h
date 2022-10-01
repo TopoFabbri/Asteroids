@@ -6,6 +6,15 @@
 #include "Menu.h"
 #include "Asteroid.h"
 
+struct Parallax
+{
+	Rectangle dest;
+	Vector2 minPos;
+	Vector2 maxPos;
+	Texture2D image;
+	float mult;
+};
+
 struct Game
 {
 	static const int maxAst = 10;
@@ -17,6 +26,9 @@ struct Game
 	Menu controlsMenu;
 	Menu credits;
 	Texture2D bg;
+	Texture2D bgStars;
+	Parallax planets[2];
+	Texture2D bgFog;
 	Asteroid ast[maxAst];
 	int score;
 };
@@ -31,3 +43,6 @@ void input(Game& game);
 void checkCollisions(Game& game);
 void collideShip(Asteroid& ast, Ship& ship);
 bool isGameOver(Game& game);
+void parallax(Game& game);
+void loadTextures(Game& game);
+Parallax newParallax(float mult);

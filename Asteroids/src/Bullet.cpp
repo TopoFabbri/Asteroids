@@ -1,18 +1,20 @@
 #include "Bullet.h"
 
+Texture2D laser;
+
 Bullet newBullet()
 {
 	Bullet bul{};
 
 	bul.pos = {0, 0};
 	bul.vel = { 0, 0 };
-	bul.sprite = LoadTexture("res/laser.png");
+	bul.sprite = laser;
 	bul.speed = 500;
 	bul.hit = false;
 	bul.loaded = true;
 	bul.lifeSpan = 2;
 	bul.curLife = bul.lifeSpan;
-	bul.size = 3;
+	bul.size = 7;
 
 	return bul;
 }
@@ -57,13 +59,17 @@ void moveBullet(Bullet& bul)
 		bul.pos.y = (float)GetScreenHeight();
 }
 
-void drawBullet(Bullet bul)
+void drawBullet(Bullet bul, bool showColliders)
 {
-	const Vector2 size = { 9, 54 };
-	Rectangle dest = { bul.pos.x, bul.pos.y, size.x, size.y };
+	const Vector2 size = { (float)bul.sprite.width, (float)bul.sprite.height };
+	float textureAspect = size.x / size.y;
+	Rectangle source = { size.x / 6 + 5 * size.x / 6, 0, size.x / 6, size.y };
+	Rectangle dest = { bul.pos.x, bul.pos.y, bul.size * 2, bul.size * 2 * textureAspect };
 
 	float rot = getRotation(bul.vel);
 
-	DrawTexturePro(bul.sprite, { 0, 0, size.x, size.y }, dest, { size.x / 2, size.y / 2 }, rot, WHITE);
-	DrawCircleLines((int)bul.pos.x, (int)bul.pos.y, bul.size, RED);
+	DrawTexturePro(bul.sprite, source, dest, { dest.width / 2, dest.height / 2 }, rot, WHITE);
+
+	if (showColliders)
+		DrawCircleLines((int)bul.pos.x, (int)bul.pos.y, bul.size, RED);
 }
