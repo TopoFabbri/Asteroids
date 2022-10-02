@@ -4,15 +4,16 @@
 
 	struct Button
 	{
-		Rectangle rec{ 0, 0, 200, 50 };
-		Color normal = WHITE;
-		Color hovered = DARKGRAY;
-		Color txtColor = BLACK;
-		float size = 30;
-		float txtSpacing = 1;
-		const char* text = "Button";
-		float indent = 10;
-		Font font = GetFontDefault();
+		Rectangle rec;
+		Color normal;
+		Color hovered;
+		Color txtColor;
+		Texture2D sprite;
+		float size;
+		float txtSpacing;
+		const char* text;
+		float indent;
+		Font font;
 	};
 
 	Button createButton();

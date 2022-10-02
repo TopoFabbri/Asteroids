@@ -30,6 +30,8 @@ struct Game
 	Parallax planets[2];
 	Texture2D bgFog;
 	Asteroid ast[maxAst];
+	Color starBrightness;
+	bool dimming;
 	int score;
 };
 
@@ -45,4 +47,5 @@ void collideShip(Asteroid& ast, Ship& ship);
 bool isGameOver(Game& game);
 void parallax(Game& game);
 void loadTextures(Game& game);
+void updateStarBrightness(Color& starBrightness, bool& dimming);
 Parallax newParallax(float mult);

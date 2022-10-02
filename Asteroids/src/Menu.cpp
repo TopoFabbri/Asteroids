@@ -33,6 +33,7 @@ void mainMenu(Settings& gSettings, Menu& mMenu)
 		mMenu.btn[2].text = "Settings";
 		mMenu.btn[3].text = "Controls";
 		mMenu.btn[4].text = "Credits";
+		mMenu.bg = LoadTexture("res/bgs/backgroundMenu.png");
 	}
 
 	// Update
@@ -46,10 +47,13 @@ void mainMenu(Settings& gSettings, Menu& mMenu)
 
 void draw(Menu menu)
 {
+	Rectangle source{ 0, 0, (float)menu.bg.width, (float)menu.bg.height };
 	Rectangle screen = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+
 	BeginDrawing();
 
 	ClearBackground(BLACK);
+	DrawTexturePro(menu.bg, source, screen, { 0, 0 }, 0, WHITE);
 
 	DrawText(menu.title, (int)menu.titlePos.x, (int)menu.titlePos.y, 50, WHITE);
 	drawButton(menu.btn[0]);
@@ -91,7 +95,7 @@ void takeInput(Menu& menu, Settings& gSettings)
 
 void updateButtons(Menu& menu)
 {
-	const float btnSpacing = 0.0f;
+	const float btnSpacing = 10.0f;
 
 	updateButton(menu.btn[0], ((float)GetScreenHeight() / 8) * 4);
 	updateButton(menu.btn[1], (float)GetScreenHeight() - (float)GetScreenHeight() / 8);
@@ -163,15 +167,12 @@ void controlsMenuUpdate(Menu& ui, Settings& gSettings)
 
 void settingsMenu(Settings& gSettings, Menu& ui)
 {
-	Vector2 popInd{ (float)GetScreenWidth() / 8, (float)GetScreenHeight() / 8 };
-	const Rectangle backImage{ popInd.x, popInd.y,
-		6 * popInd.x, 6 * popInd.y };
-
 	if (!ui.isActive)
 	{
 		ui.title = "Settings";
 		ui.isActive = true;
 		ui.btn[1].text = "Back";
+		ui.bg = LoadTexture("res/bgs/backgroundMenu.png");
 	}
 
 	// Update
@@ -196,9 +197,12 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 
 
 	// Draw
+	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
+	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+
 	BeginDrawing();
 
-	DrawRectangleRec(backImage, BLACK);
+	DrawTexturePro(ui.bg, source, dest, { 0, 0 }, 0, WHITE);
 	drawButton(ui.btn[1]);
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawCheckbox(ui.chbxs[0]);

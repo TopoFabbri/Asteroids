@@ -24,6 +24,7 @@ struct Rock
 	Vector2 vel;
 	Vector2 pos;
 	Texture2D sprite;
+	Color color;
 };
 
 struct Asteroid

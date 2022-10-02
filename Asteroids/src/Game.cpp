@@ -8,13 +8,15 @@ Game newGame()
 
 	game.settings = newSettings();
 	game.ship = newShip();
-	game.planets[0] = newParallax(0.3f);
-	game.planets[1] = newParallax(0.6f);
+	game.planets[0] = newParallax(0.05f);
+	game.planets[1] = newParallax(0.5f);
 	game.isPlaying = false;
 	game.mainMenu = createMenu();
 	game.settingsMenu = createMenu();
 	game.controlsMenu = createMenu();
 	game.credits = createMenu();
+	game.starBrightness = {255, 255, 255, 255};
+	game.dimming = true;
 
 	for (int i = 0; i < Game::maxAst; i++)
 	{
@@ -102,6 +104,7 @@ void update(Game& game)
 	checkCollisions(game);
 	moveShip(game.ship);
 	shipPortal(game.ship);
+	updateStarBrightness(game.starBrightness, game.dimming);
 	parallax(game);
 
 	for (int i = 0; i < game.maxAst; i++)
@@ -128,9 +131,9 @@ void draw(Game& game)
 	BeginDrawing();
 	ClearBackground(BLACK);
 	DrawTexturePro(game.bg, bgSource, bgDest, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(game.bgStars, bgSource, bgDest, { 0, 0 }, 0, game.starBrightness);
 	DrawTexturePro(game.planets[0].image, bgSource, game.planets[0].dest, { 0, 0 }, 0, WHITE);
 	DrawTexturePro(game.planets[1].image, bgSource, game.planets[1].dest, { 0, 0 }, 0, WHITE);
-	DrawTexturePro(game.bgFog, bgSource, bgDest, { 0, 0 }, 0, WHITE);
 
 	drawShip(game.ship, game.settings.showColiders);
 
@@ -138,6 +141,7 @@ void draw(Game& game)
 	{
 		drawAsteroid(game.ast[i]);
 	}
+	DrawTexturePro(game.bgFog, bgSource, bgDest, { 0, 0 }, 0, WHITE);
 
 	DrawText(TextFormat("%i", game.score), GetScreenWidth() - MeasureText(TextFormat("%i", game.score) - 5, 30),
 		5, 30, YELLOW);
@@ -293,6 +297,33 @@ void loadTextures(Game& game)
 	game.planets[0].image = LoadTexture("res/bgs/background3PlanetLeft.png");
 	game.planets[1].image = LoadTexture("res/bgs/background3PlanetRight.png");
 	game.bgFog = LoadTexture("res/bgs/background4Fog.png");
+}
+
+void updateStarBrightness(Color& starBrightness, bool& dimming)
+{
+	const float minBrigtness = 0;
+	const float maxBrigtness = 255;
+	float newBrightness = starBrightness.a;
+
+	if (dimming)
+		newBrightness -= 254 * GetFrameTime();
+	else
+		newBrightness += 254 * GetFrameTime();
+
+	if (newBrightness <= minBrigtness)
+	{
+		dimming = false;
+	}
+	else if (newBrightness >= maxBrigtness)
+	{
+		dimming = true;
+		newBrightness = 254;
+	}
+
+	starBrightness.r = (unsigned char)(newBrightness * 0.8);
+	starBrightness.g = (unsigned char)newBrightness;
+	starBrightness.b = (unsigned char)0;
+	starBrightness.a = (unsigned char)newBrightness;
 }
 
 Parallax newParallax(float mult)

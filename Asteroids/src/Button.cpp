@@ -3,17 +3,17 @@
 void drawButton(Button& btn)
 {
 	const Vector2 txtSize = MeasureTextEx(btn.font, btn.text, btn.size, btn.txtSpacing);
+	const Rectangle source{ 0, 0, (float)btn.sprite.width, (float)btn.sprite.height };
 
 	btn.rec.width = txtSize.x + 2 * btn.indent;
-	btn.rec.height = txtSize.y;
-
-	const Color printColor = CheckCollisionPointRec(GetMousePosition(), btn.rec) ? btn.hovered : btn.normal;
-	DrawRectangleRec(btn.rec, printColor);
+	btn.rec.height = txtSize.y + 2 * btn.indent;
 
 	if (CheckCollisionPointRec(GetMousePosition(), btn.rec))
-		DrawRectangleLinesEx(btn.rec, 1, YELLOW);
+		DrawTexturePro(btn.sprite, source, btn.rec, { 0, 0 }, 0, btn.hovered);
+	else
+		DrawTexturePro(btn.sprite, source, btn.rec, { 0, 0 }, 0, btn.normal);
 
-	DrawTextEx(btn.font, btn.text, { btn.rec.x + btn.indent, btn.rec.y }, btn.size, btn.txtSpacing, btn.txtColor);
+	DrawTextEx(btn.font, btn.text, { btn.rec.x + btn.indent, btn.rec.y + btn.indent }, btn.size, btn.txtSpacing, btn.txtColor);
 }
 
 bool isButtonPressed(Button btn)
@@ -24,12 +24,13 @@ bool isButtonPressed(Button btn)
 
 Button createButton()
 {
-	Button button;
+	Button button{};
 
 	button.rec = { 0, 0, 200, 50 };
 	button.normal = WHITE;
-	button.hovered = GRAY;
-	button.txtColor = BLACK;
+	button.hovered = GREEN;
+	button.txtColor = WHITE;
+	button.sprite = LoadTexture("res/ui/Button.png");
 	button.size = 30;
 	button.txtSpacing = 1;
 	button.text = "Button";

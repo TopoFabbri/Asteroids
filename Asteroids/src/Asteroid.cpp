@@ -37,6 +37,11 @@ void newRock(Rock& rock, Rock::State state)
 	rock.pos = { (float)(rand() % (int)(GetScreenWidth())), (float)(rand() % (int)(GetScreenHeight())) };
 	rock.rot = (float)(rand() % 360);
 	randomRotSpeed(rock.rotSpeed);
+
+	int rn = rand() % 254;
+	Color color{ (unsigned char)rand, (unsigned char)rand, (unsigned char)rand, 254 };
+
+	rock.color = color;
 }
 
 void newAsteroid(Asteroid& ast)
@@ -319,7 +324,7 @@ void drawAsteroid(Asteroid ast)
 	{
 		DrawTexturePro(ast.big.sprite, { 0, 0, (float)ast.big.sprite.width, (float)ast.big.sprite.height },
 			{ ast.big.pos.x, ast.big.pos.y, ast.big.size * 2, ast.big.size * 2 }, 
-			{ ast.big.size, ast.big.size }, ast.big.rot, WHITE);
+			{ ast.big.size, ast.big.size }, ast.big.rot, ast.big.color);
 	}
 
 	for (int i = 0; i < 2; i++)
@@ -328,7 +333,7 @@ void drawAsteroid(Asteroid ast)
 		{
 			DrawTexturePro(ast.med[i].sprite, { 0, 0, (float)ast.med[i].sprite.width, (float)ast.med[i].sprite.height },
 				{ ast.med[i].pos.x, ast.med[i].pos.y, ast.med[i].size * 2, ast.med[i].size * 2 },
-				{ ast.med[i].size, ast.med[i].size }, ast.med[i].rot, WHITE);
+				{ ast.med[i].size, ast.med[i].size }, ast.med[i].rot, ast.med[i].color);
 		}
 
 		for (int j = 0; j < 2; j++)
@@ -337,7 +342,7 @@ void drawAsteroid(Asteroid ast)
 			{
 				DrawTexturePro(ast.small[i][j].sprite, { 0, 0, (float)ast.small[i][j].sprite.width, (float)ast.small[i][j].sprite.height },
 					{ ast.small[i][j].pos.x, ast.small[i][j].pos.y, ast.small[i][j].size * 2, ast.small[i][j].size * 2 },
-					{ ast.small[i][j].size, ast.small[i][j].size }, ast.small[i][j].rot, WHITE);
+					{ ast.small[i][j].size, ast.small[i][j].size }, ast.small[i][j].rot, ast.small[i][j].color);
 			}
 		}
 	}
