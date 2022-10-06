@@ -34,14 +34,14 @@ Ship newShip()
 	return ship;
 }
 
-void moveShip(Ship& ship)
+void moveShip(Ship& ship, Settings settings)
 {
 	ship.pos.x += ship.vel.x * ship.speed * GetFrameTime();
 	ship.pos.y += ship.vel.y * ship.speed * GetFrameTime();
 
 	for (int i = 0; i < ship.maxBullets; i++)
 	{
-		moveBullet(ship.bul[i]);
+		moveBullet(ship.bul[i], settings);
 
 		if (ship.bul[i].curLife > ship.bul[i].lifeSpan)
 			resetBullet(ship.pos, ship.bul[i]);

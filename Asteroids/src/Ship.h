@@ -28,7 +28,7 @@ struct Ship
 };
 
 Ship newShip();
-void moveShip(Ship& ship);
+void moveShip(Ship& ship, Settings settings);
 void accelerateShip(float axisX, float axisY, Ship& ship);
 void updateRotation(Ship& ship);
 void drawShip(Ship& ship, bool showColliders);

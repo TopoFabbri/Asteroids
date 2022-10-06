@@ -103,7 +103,7 @@ void update(Game& game)
 {
 	input(game);
 	checkCollisions(game);
-	moveShip(game.ship);
+	moveShip(game.ship, game.settings);
 	shipPortal(game.ship, game.settings);
 	updateStarBrightness(game.starBrightness, game.dimming);
 	parallax(game);
@@ -113,6 +113,7 @@ void update(Game& game)
 		moveAsteroid(game.ast[i]);
 		portalAsteroids(game.ast[i], game.settings);
 		updateCounter(game.ast[i]);
+
 		if (asteroidDestroyed(game.ast[i]))
 			game.ast[i].big.active = true;
 	}

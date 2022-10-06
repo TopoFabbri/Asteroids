@@ -46,7 +46,7 @@ void fireBullet(Vector2 pos, Bullet& bul)
 	bul.curLife = 0;
 }
 
-void moveBullet(Bullet& bul)
+void moveBullet(Bullet& bul, Settings settings)
 {
 	bul.pos.x += bul.vel.x * GetFrameTime() * bul.speed;
 	bul.pos.y += bul.vel.y * GetFrameTime() * bul.speed;
@@ -54,13 +54,33 @@ void moveBullet(Bullet& bul)
 	bul.curLife += GetFrameTime();
 
 	if ((int)bul.pos.x > GetScreenWidth())
+	{
 		bul.pos.x = 0;
+
+		if (settings.circleWarp)
+			bul.pos.y = (float)GetScreenHeight() - bul.pos.y;
+	}
 	else if ((int)bul.pos.x < 0)
+	{
 		bul.pos.x = (float)GetScreenWidth();
+
+		if (settings.circleWarp)
+			bul.pos.y = (float)GetScreenHeight() - bul.pos.y;
+	}
 	else if ((int)bul.pos.y > GetScreenHeight())
+	{
 		bul.pos.y = 0;
+
+		if (settings.circleWarp)
+			bul.pos.x = (float)GetScreenWidth() - bul.pos.x;
+	}
 	else if ((int)bul.pos.y < 0)
+	{
 		bul.pos.y = (float)GetScreenHeight();
+
+		if (settings.circleWarp)
+			bul.pos.x = (float)GetScreenWidth() - bul.pos.x;
+	}
 }
 
 void drawBullet(Bullet& bul, bool showColliders)

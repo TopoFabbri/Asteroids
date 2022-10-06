@@ -1,4 +1,5 @@
 #pragma once
+#include "Settings.h"
 #include "Topo.h"
 
 struct Bullet
@@ -20,6 +21,6 @@ struct Bullet
 Bullet newBullet();
 void resetBullet(Vector2 pos, Bullet& bul);
 void fireBullet(Vector2 pos, Bullet& bul);
-void moveBullet(Bullet& bul);
+void moveBullet(Bullet& bul, Settings settings);
 void drawBullet(Bullet& bul, bool showColliders);
 void showExplosion(Bullet& bul);
