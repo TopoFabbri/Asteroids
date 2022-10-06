@@ -15,6 +15,7 @@ Game newGame()
 	game.settingsMenu = createMenu();
 	game.controlsMenu = createMenu();
 	game.credits = createMenu();
+	game.pauseMenu = createMenu();
 	game.starBrightness = {255, 255, 255, 255};
 	game.dimming = true;
 
@@ -62,7 +63,7 @@ void loop(Game& game)
 			break;
 
 		case Scene::Pause:
-			pauseMenu(game.settings, game.credits);
+			pauseMenu(game.settings, game.pauseMenu);
 			break;
 
 		default:;
@@ -103,14 +104,14 @@ void update(Game& game)
 	input(game);
 	checkCollisions(game);
 	moveShip(game.ship);
-	shipPortal(game.ship);
+	shipPortal(game.ship, game.settings);
 	updateStarBrightness(game.starBrightness, game.dimming);
 	parallax(game);
 
 	for (int i = 0; i < game.maxAst; i++)
 	{
 		moveAsteroid(game.ast[i]);
-		portalAsteroids(game.ast[i]);
+		portalAsteroids(game.ast[i], game.settings);
 		updateCounter(game.ast[i]);
 		if (asteroidDestroyed(game.ast[i]))
 			game.ast[i].big.active = true;
@@ -135,12 +136,13 @@ void draw(Game& game)
 	DrawTexturePro(game.planets[0].image, bgSource, game.planets[0].dest, { 0, 0 }, 0, WHITE);
 	DrawTexturePro(game.planets[1].image, bgSource, game.planets[1].dest, { 0, 0 }, 0, WHITE);
 
-	drawShip(game.ship, game.settings.showColiders);
-
 	for (int i = 0; i < game.maxAst; i++)
 	{
-		drawAsteroid(game.ast[i]);
+		drawAsteroid(game.ast[i], game.settings);
 	}
+
+	drawShip(game.ship, game.settings.showColliders);
+
 	DrawTexturePro(game.bgFog, bgSource, bgDest, { 0, 0 }, 0, WHITE);
 
 	DrawText(TextFormat("%i", game.score), GetScreenWidth() - MeasureText(TextFormat("%i", game.score) - 5, 30),
@@ -228,7 +230,8 @@ void checkCollisions(Game& game)
 			{
 				if (checkAsteroidCollision(game.ast[i], { game.ship.bul[j].pos, game.ship.bul[j].size }))
 				{
-					resetBullet(game.ship.pos, game.ship.bul[j]);
+					game.ship.bul[j].hit = true;
+					game.ship.bul[j].vel = { 0, 0 };
 					game.score += 10;
 				}
 			}

@@ -5,14 +5,14 @@
 
 struct Line
 {
-	Vector2 start{};
-	Vector2 end{};
+	Vector2 start;
+	Vector2 end;
 };
 
 struct Segment3D
 {
-	Vector3 start{};
-	Vector3 end{};
+	Vector3 start;
+	Vector3 end;
 };
 
 struct Circle
@@ -23,9 +23,9 @@ struct Circle
 
 struct Box2D
 {
-	Rectangle rec{};
-	Vector2 vel{};
-	float weight{};
+	Rectangle rec;
+	Vector2 vel;
+	float weight;
 };
 
 struct Ball

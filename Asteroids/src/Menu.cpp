@@ -34,6 +34,7 @@ void mainMenu(Settings& gSettings, Menu& mMenu)
 		mMenu.btn[3].text = "Controls";
 		mMenu.btn[4].text = "Credits";
 		mMenu.bg = LoadTexture("res/bgs/backgroundMenu.png");
+		mMenu.window = LoadTexture("res/ui/Window.png");
 	}
 
 	// Update
@@ -47,13 +48,20 @@ void mainMenu(Settings& gSettings, Menu& mMenu)
 
 void draw(Menu menu)
 {
-	Rectangle source{ 0, 0, (float)menu.bg.width, (float)menu.bg.height };
-	Rectangle screen = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+	Rectangle bgSource{ 0, 0, (float)menu.bg.width, (float)menu.bg.height };
+	Rectangle screen{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+
+	Rectangle wdSource{ 0, 0, (float)menu.window.width, (float)menu.window.height };
+	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
+
+	wdDest.x = (float)GetScreenWidth() / 2 - wdDest.width / 2;
+	wdDest.y = (float)GetScreenHeight() / 2 - wdDest.height / 2;
 
 	BeginDrawing();
 
 	ClearBackground(BLACK);
-	DrawTexturePro(menu.bg, source, screen, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(menu.bg, bgSource, screen, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(menu.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
 
 	DrawText(menu.title, (int)menu.titlePos.x, (int)menu.titlePos.y, 50, WHITE);
 	drawButton(menu.btn[0]);
@@ -69,7 +77,7 @@ void positionTitle(Menu& menu)
 {
 	menu.titlePos.x = (float)MeasureText(menu.title, 50);
 	menu.titlePos.x = (float)GetScreenWidth() / 2 - menu.titlePos.x / 2;
-	menu.titlePos.y = (float)GetScreenHeight() / 8;
+	menu.titlePos.y = (float)GetScreenHeight() * (9.f / 64.f);
 }
 
 void takeInput(Menu& menu, Settings& gSettings)
@@ -172,10 +180,17 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 		ui.title = "Settings";
 		ui.isActive = true;
 		ui.btn[1].text = "Back";
+		ui.chbxs[0].txt = "Show FPS";
+		ui.chbxs[1].txt = "Show colliders";
+		ui.chbxs[2].txt = "Circle warp";
 		ui.bg = LoadTexture("res/bgs/backgroundMenu.png");
+		ui.window = LoadTexture("res/ui/Window.png");
+		ui.chkBxQty = 3;
+		ui.btnQty = 1;
 	}
 
 	// Update
+
 	if (isButtonPressed(ui.btn[1]))
 	{
 		ui.isActive = false;
@@ -185,27 +200,50 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 	positionTitle(ui);
 	updateButtons(ui);
 
-	ui.chbxs[0].rec.x = 300;
-	ui.chbxs[0].rec.y = 300;
+	for (int i = 0; i < ui.chkBxQty; i++)
+	{
+		ui.chbxs[i].rec.x = (float)GetScreenWidth() / 4;
+		ui.chbxs[i].rec.y = (float)(350 + i * 100);
+	}
 
-	ui.chbxs[0].txt = "Show FPS";
+	// Input
 
 	if (ui.chbxs[0].checked)
 		gSettings.drawFps = true;
 	else
 		gSettings.drawFps = false;
 
+	if (ui.chbxs[1].checked)
+		gSettings.showColliders = true;
+	else
+		gSettings.showColliders = false;
+
+	if (ui.chbxs[2].checked)
+		gSettings.circleWarp = true;
+	else
+		gSettings.circleWarp = false;
+
 
 	// Draw
 	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
 	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
 
-	BeginDrawing();
+	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
+	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
 
+	wdDest.x = (float)GetScreenWidth() / 2 - wdDest.width / 2;
+	wdDest.y = (float)GetScreenHeight() / 2 - wdDest.height / 2;
+
+	BeginDrawing();
 	DrawTexturePro(ui.bg, source, dest, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
+
 	drawButton(ui.btn[1]);
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
-	drawCheckbox(ui.chbxs[0]);
+	for (int i = 0; i < ui.chkBxQty; i++)
+	{
+		drawCheckbox(ui.chbxs[i]);
+	}
 
 	EndDrawing();
 }
@@ -274,6 +312,7 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 		ui.isActive = true;
 		ui.btn[1].text = "Main Menu";
 		ui.btn[0].text = "Play";
+		ui.window = LoadTexture("res/ui/Window.png");
 	}
 
 	// Update
@@ -293,11 +332,19 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 	}
 
 	// Draw
+	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
+	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
+
+	wdDest.x = (float)GetScreenWidth() / 2 - wdDest.width / 2;
+	wdDest.y = (float)GetScreenHeight() / 2 - wdDest.height / 2;
+
 	BeginDrawing();
 
 	ClearBackground(BLACK);
-
 	DrawTexture(ui.bg, 0, 0, WHITE);
+	DrawRectangleRec(wdDest, { 0, 0, 0, 150 });
+	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
+
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawButton(ui.btn[0]);
 	drawButton(ui.btn[1]);

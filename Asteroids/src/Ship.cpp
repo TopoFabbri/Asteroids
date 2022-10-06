@@ -69,7 +69,7 @@ void updateRotation(Ship& ship)
 	ship.rot = getRotation({ (float)GetMouseX() - ship.pos.x, (float)GetMouseY() - ship.pos.y });
 }
 
-void drawShip(Ship ship, bool showColliders)
+void drawShip(Ship& ship, bool showColliders)
 {
 	Rectangle source = { 0, 0, (float)ship.sprite.width, (float)ship.sprite.height };
 	Rectangle dest = { ship.pos.x, ship.pos.y, ship.size * 2, ship.size * 2 };
@@ -85,28 +85,37 @@ void drawShip(Ship ship, bool showColliders)
 	drawShipLives(ship);
 }
 
-void shipPortal(Ship& ship)
+void shipPortal(Ship& ship, Settings settings)
 {
 	if (ship.pos.x <= 0)
 	{
 		ship.pos.x = (float)GetScreenWidth();
-		ship.pos.y = (float)GetScreenHeight() - ship.pos.y;
+
+		if (settings.circleWarp)
+			ship.pos.y = (float)GetScreenHeight() - ship.pos.y;
+
 	}
 	else if (ship.pos.x >= (float)GetScreenWidth())
 	{
 		ship.pos.x = 0;
-		ship.pos.y = (float)GetScreenHeight() - ship.pos.y;
+
+		if (settings.circleWarp)
+			ship.pos.y = (float)GetScreenHeight() - ship.pos.y;
 	}
 
 	if (ship.pos.y <= 0)
 	{
 		ship.pos.y = (float)GetScreenHeight();
-		ship.pos.x = (float)GetScreenWidth() - ship.pos.x;
+
+		if (settings.circleWarp)
+			ship.pos.x = (float)GetScreenWidth() - ship.pos.x;
 	}
 	else if (ship.pos.y >= (float)GetScreenHeight())
 	{
 		ship.pos.y = 0;
-		ship.pos.x = (float)GetScreenWidth() - ship.pos.x;
+
+		if (settings.circleWarp)
+			ship.pos.x = (float)GetScreenWidth() - ship.pos.x;
 	}
 }
 

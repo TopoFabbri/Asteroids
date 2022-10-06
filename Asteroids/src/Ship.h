@@ -2,6 +2,7 @@
 
 #include "Topo.h"
 #include "Bullet.h"
+#include "Settings.h"
 
 struct Ship
 {
@@ -30,7 +31,7 @@ Ship newShip();
 void moveShip(Ship& ship);
 void accelerateShip(float axisX, float axisY, Ship& ship);
 void updateRotation(Ship& ship);
-void drawShip(Ship ship, bool showColliders);
-void shipPortal(Ship& ship);
+void drawShip(Ship& ship, bool showColliders);
+void shipPortal(Ship& ship, Settings settings);
 void shipAnimator(Ship& ship);
 void drawShipLives(Ship& ship);

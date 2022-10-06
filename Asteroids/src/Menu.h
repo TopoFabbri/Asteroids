@@ -11,6 +11,7 @@ struct Menu
 	int btnQty;
 	int chkBxQty;
 	Texture2D bg;
+	Texture2D window;
 	bool isActive;
 	const char* title;
 	Vector2 titlePos;

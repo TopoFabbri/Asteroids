@@ -25,6 +25,7 @@ struct Game
 	Menu settingsMenu;
 	Menu controlsMenu;
 	Menu credits;
+	Menu pauseMenu;
 	Texture2D bg;
 	Texture2D bgStars;
 	Parallax planets[2];

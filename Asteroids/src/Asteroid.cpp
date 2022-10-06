@@ -116,24 +116,36 @@ bool asteroidDestroyed(Asteroid& ast)
 	return destroyed;
 }
 
-void portalAsteroids(Asteroid& ast)
+void portalAsteroids(Asteroid& ast, Settings settings)
 {
 	if (ast.big.pos.x <= 0)
 	{
 		ast.big.pos.x = (float)GetScreenWidth();
+
+		if (settings.circleWarp)
+			ast.big.pos.y = (float)GetScreenHeight() - ast.big.pos.y;
 	}
 	else if (ast.big.pos.x >= (float)GetScreenWidth())
 	{
 		ast.big.pos.x = 0;
+
+		if (settings.circleWarp)
+			ast.big.pos.y = (float)GetScreenHeight() - ast.big.pos.y;
 	}
 
 	if (ast.big.pos.y <= 0)
 	{
 		ast.big.pos.y = (float)GetScreenHeight();
+
+		if (settings.circleWarp)
+			ast.big.pos.x = (float)GetScreenWidth() - ast.big.pos.x;
 	}
 	else if (ast.big.pos.y >= (float)GetScreenHeight())
 	{
 		ast.big.pos.y = 0;
+
+		if (settings.circleWarp)
+			ast.big.pos.x = (float)GetScreenWidth() - ast.big.pos.x;
 	}
 
 	for (int i = 0; i < 2; i++)
@@ -141,19 +153,31 @@ void portalAsteroids(Asteroid& ast)
 		if (ast.med[i].pos.x <= 0)
 		{
 			ast.med[i].pos.x = (float)GetScreenWidth();
+
+			if (settings.circleWarp)
+				ast.med[i].pos.y = (float)GetScreenHeight() - ast.med[i].pos.y;
 		}
 		else if (ast.med[i].pos.x >= (float)GetScreenWidth())
 		{
 			ast.med[i].pos.x = 0;
+
+			if (settings.circleWarp)
+				ast.med[i].pos.y = (float)GetScreenHeight() - ast.med[i].pos.y;
 		}
 
 		if (ast.med[i].pos.y <= 0)
 		{
 			ast.med[i].pos.y = (float)GetScreenHeight();
+
+			if (settings.circleWarp)
+				ast.med[i].pos.x = (float)GetScreenWidth() - ast.med[i].pos.x;
 		}
 		else if (ast.med[i].pos.y >= (float)GetScreenHeight())
 		{
 			ast.med[i].pos.y = 0;
+
+			if (settings.circleWarp)
+				ast.med[i].pos.x = (float)GetScreenWidth() - ast.med[i].pos.x;
 		}
 
 		for (int j = 0; j < 2; j++)
@@ -163,19 +187,31 @@ void portalAsteroids(Asteroid& ast)
 				if (ast.small[i][j].pos.x <= 0)
 				{
 					ast.small[i][j].pos.x = (float)GetScreenWidth();
+
+					if (settings.circleWarp)
+						ast.small[i][j].pos.y = (float)GetScreenHeight() - ast.small[i][j].pos.y;
 				}
 				else if (ast.small[i][j].pos.x >= (float)GetScreenWidth())
 				{
 					ast.small[i][j].pos.x = 0;
+
+					if (settings.circleWarp)
+						ast.small[i][j].pos.y = (float)GetScreenHeight() - ast.small[i][j].pos.y;
 				}
 
 				if (ast.small[i][j].pos.y <= 0)
 				{
 					ast.small[i][j].pos.y = (float)GetScreenHeight();
+
+					if (settings.circleWarp)
+						ast.small[i][j].pos.x = (float)GetScreenWidth() - ast.small[i][j].pos.x;
 				}
 				else if (ast.small[i][j].pos.y >= (float)GetScreenHeight())
 				{
 					ast.small[i][j].pos.y = 0;
+
+					if (settings.circleWarp)
+						ast.small[i][j].pos.x = (float)GetScreenWidth() - ast.small[i][j].pos.x;
 				}
 			}
 		}
@@ -318,13 +354,16 @@ void collideMidAsteroid(Asteroid& ast, int i)
 	ast.small[i][1].pos = ast.med[i].pos;
 }
 
-void drawAsteroid(Asteroid ast)
+void drawAsteroid(Asteroid ast, Settings settings)
 {
 	if (ast.big.active)
 	{
 		DrawTexturePro(ast.big.sprite, { 0, 0, (float)ast.big.sprite.width, (float)ast.big.sprite.height },
 			{ ast.big.pos.x, ast.big.pos.y, ast.big.size * 2, ast.big.size * 2 }, 
 			{ ast.big.size, ast.big.size }, ast.big.rot, ast.big.color);
+
+		if(settings.showColliders)
+			DrawCircleLines((int)ast.big.pos.x, (int)ast.big.pos.y, ast.big.size, WHITE);
 	}
 
 	for (int i = 0; i < 2; i++)
@@ -334,6 +373,9 @@ void drawAsteroid(Asteroid ast)
 			DrawTexturePro(ast.med[i].sprite, { 0, 0, (float)ast.med[i].sprite.width, (float)ast.med[i].sprite.height },
 				{ ast.med[i].pos.x, ast.med[i].pos.y, ast.med[i].size * 2, ast.med[i].size * 2 },
 				{ ast.med[i].size, ast.med[i].size }, ast.med[i].rot, ast.med[i].color);
+
+			if (settings.showColliders)
+				DrawCircleLines((int)ast.med[i].pos.x, (int)ast.med[i].pos.y, ast.med[i].size, WHITE);
 		}
 
 		for (int j = 0; j < 2; j++)
@@ -343,6 +385,9 @@ void drawAsteroid(Asteroid ast)
 				DrawTexturePro(ast.small[i][j].sprite, { 0, 0, (float)ast.small[i][j].sprite.width, (float)ast.small[i][j].sprite.height },
 					{ ast.small[i][j].pos.x, ast.small[i][j].pos.y, ast.small[i][j].size * 2, ast.small[i][j].size * 2 },
 					{ ast.small[i][j].size, ast.small[i][j].size }, ast.small[i][j].rot, ast.small[i][j].color);
+
+				if (settings.showColliders)
+					DrawCircleLines((int)ast.small[i][j].pos.x, (int)ast.small[i][j].pos.y, ast.small[i][j].size, WHITE);
 			}
 		}
 	}

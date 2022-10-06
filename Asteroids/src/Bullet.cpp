@@ -9,6 +9,9 @@ Bullet newBullet()
 	bul.pos = {0, 0};
 	bul.vel = { 0, 0 };
 	bul.sprite = laser;
+	bul.explosion = LoadTexture("res/anims/LaserExplosion.png");
+	bul.explosionFrame = 0;
+	bul.explosionSize = 50;
 	bul.speed = 500;
 	bul.hit = false;
 	bul.loaded = true;
@@ -28,6 +31,7 @@ void resetBullet(Vector2 pos, Bullet& bul)
 	bul.loaded = true;
 	bul.lifeSpan = 2;
 	bul.curLife = bul.lifeSpan;
+	bul.explosionFrame = 0;
 }
 
 void fireBullet(Vector2 pos, Bullet& bul)
@@ -59,7 +63,7 @@ void moveBullet(Bullet& bul)
 		bul.pos.y = (float)GetScreenHeight();
 }
 
-void drawBullet(Bullet bul, bool showColliders)
+void drawBullet(Bullet& bul, bool showColliders)
 {
 	const Vector2 size = { (float)bul.sprite.width, (float)bul.sprite.height };
 	float textureAspect = size.x / size.y;
@@ -69,7 +73,27 @@ void drawBullet(Bullet bul, bool showColliders)
 	float rot = getRotation(bul.vel);
 
 	DrawTexturePro(bul.sprite, source, dest, { dest.width / 2, dest.height / 2 }, rot, WHITE);
+	showExplosion(bul);
 
 	if (showColliders)
 		DrawCircleLines((int)bul.pos.x, (int)bul.pos.y, bul.size, RED);
+}
+
+void showExplosion(Bullet& bul)
+{
+	if (bul.hit)
+	{
+		float frameWidth = (float)bul.explosion.width / 9;
+		float frameHeight = (float)bul.explosion.height / 7;
+
+		Rectangle source{ (float)bul.explosionFrame * frameWidth, 6 * frameHeight, frameWidth, frameHeight };
+		Rectangle dest{ bul.pos.x - bul.explosionSize / 2, bul.pos.y - bul.explosionSize / 2, bul.explosionSize, bul.explosionSize };
+
+		DrawTexturePro(bul.explosion, source, dest, { 0, 0 }, 0, WHITE);
+
+		bul.explosionFrame++;
+
+		if (bul.explosionFrame > 9)
+			resetBullet({ 0, 0 }, bul);
+	}
 }
