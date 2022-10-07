@@ -120,43 +120,42 @@ void updateButton(Button& btn, float posY)
 
 void controlsMenu(Settings& gSettings, Menu& ui)
 {
-	Vector2 popInd{ (float)GetScreenWidth() / 8, (float)GetScreenHeight() / 8 };
-	Rectangle backImage{ popInd.x, popInd.y,
-		6 * popInd.x, 6 * popInd.y };
-
 	if (!ui.isActive)
 	{
 		ui.title = "Controls";
 		ui.isActive = true;
 		ui.btn[1].text = "Back";
+		ui.bg = LoadTexture("res/bgs/backgroundMenu.png");
+		ui.window = LoadTexture("res/ui/Window.png");
+
+		for (int i = 0; i < ui.maxAnims; i++)
+		{
+			ui.anim[i] = {};
+		}
+
+		ui.anim[0] = newAnimation("res/anims/MovementAnim.png", 44);
 	}
 
 	// Update
 	controlsMenuUpdate(ui, gSettings);
 
 	// Draw
-	BeginDrawing();
+	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
+	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
 
-	DrawRectangleRec(backImage, BLACK);
+	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
+	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
+
+	wdDest.x = (float)GetScreenWidth() / 2 - wdDest.width / 2;
+	wdDest.y = (float)GetScreenHeight() / 2 - wdDest.height / 2;
+
+	BeginDrawing();
+	DrawTexturePro(ui.bg, source, dest, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
+	drawFrame(ui.anim[0], WHITE);
 
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawButton(ui.btn[1]);
-	DrawText("Player 1", 300, 200, 75, DARKGRAY);
-	DrawText("Player 2", GetScreenWidth() - 650, 200, 75, RED);
-	DrawRectangle(350, 300, 50, 50, GRAY);
-	DrawRectangle(350, 360, 50, 50, GRAY);
-	DrawRectangle(GetScreenWidth() - 600, 300, 50, 50, GRAY);
-	DrawRectangle(GetScreenWidth() - 600, 360, 50, 50, GRAY);
-	DrawText("W", 355, 300, 50, BLACK);
-	DrawText("S", 355, 360, 50, BLACK);
-	DrawText("^", GetScreenWidth() - 590, 300, 50, BLACK);
-	DrawText("v", GetScreenWidth() - 590, 360, 50, BLACK);
-	DrawText("Move up", 410, 300, 50, GRAY);
-	DrawText("Move down", 410, 360, 50, GRAY);
-	DrawText("Move up", GetScreenWidth() - 540, 300, 50, GRAY);
-	DrawText("Move down", GetScreenWidth() - 540, 360, 50, GRAY);
-	DrawRectangle(GetScreenWidth() / 2 - 100, GetScreenHeight() / 2, 200, 50, GRAY);
-	DrawText("Menu", GetScreenWidth() / 2 - 90, GetScreenHeight() / 2, 50, RAYWHITE);
 
 	EndDrawing();
 }
@@ -165,6 +164,14 @@ void controlsMenuUpdate(Menu& ui, Settings& gSettings)
 {
 	positionTitle(ui);
 	updateButtons(ui);
+
+	for (int i = 0; i < ui.maxAnims; i++)
+	{
+		updateAnimation(ui.anim[i]);
+	}
+
+	setPos(ui.anim[0], { 0, 0 });
+	setSize(ui.anim[0], { 200, 200 });
 
 	if (isButtonPressed(ui.btn[1]))
 	{

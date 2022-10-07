@@ -39,7 +39,6 @@ void loop(Game& game)
 		switch (game.settings.scene)
 		{
 		case Scene::Exit:
-
 			break;
 
 		case Scene::MainMenu:
@@ -75,9 +74,7 @@ void play(Game& game)
 {
 	// Begin
 	if (!game.isPlaying)
-	{
 		begin(game);
-	}
 
 	// Update
 	update(game);
@@ -165,6 +162,7 @@ void input(Game& game)
 	if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
 	{
 		Vector2 moveDir = GetMousePosition();
+
 		moveDir.x -= game.ship.pos.x;
 		moveDir.y -= game.ship.pos.y;
 

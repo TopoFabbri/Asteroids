@@ -18,6 +18,7 @@ struct Parallax
 struct Game
 {
 	static const int maxAst = 10;
+
 	Settings settings;
 	Ship ship;
 	bool isPlaying;

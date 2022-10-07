@@ -2,12 +2,15 @@
 #include "Button.h"
 #include "CheckBox.h"
 #include "Settings.h"
+#include "Animation.h"
 #include "Topo.h"
 
 struct Menu
 {
 	static const int maxBtns = 10;
 	static const int maxChkBxs = 10;
+	static const int maxAnims = 10;
+
 	int btnQty;
 	int chkBxQty;
 	Texture2D bg;
@@ -17,6 +20,7 @@ struct Menu
 	Vector2 titlePos;
 	Button btn[maxBtns];
 	CheckBox chbxs[maxChkBxs];
+	Animation anim[maxAnims];
 };
 
 Menu createMenu();
