@@ -286,12 +286,9 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 
 void creditsMenu(Settings& gSettings, Menu& ui)
 {
-	Vector2 popInd{ (float)GetScreenWidth() / 8, 0 };
-	const Rectangle backImage{ popInd.x, popInd.y,
-		6 * popInd.x, (float)GetScreenHeight() };
-
-	const char* credits[6] = { "Programing:", "Topo","", "Art:", "Chia", "Kenney" };
-	const Color color[6] = { WHITE, WHITE, BLACK, RED, RED, RED };
+	const char* credits[] = { "Programing:", "Topo - Mateo Fabbri","", "Art:", "Chiara Colombo",
+		"CraftPix", "(https://craftpix.net/product/asteroids-crusher-2d-game-kit/)"};
+	const Color color[] = { WHITE, WHITE, BLACK, RED, RED, RED, RED };
 	int posY = GetScreenHeight() / 2 - 50 * 3;
 
 	if (!ui.isActive)
@@ -301,6 +298,8 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 		ui.title = "Credits";
 		ui.isActive = true;
 		ui.btn[1].text = "Back";
+		ui.bg = LoadTexture("res/bgs/backgroundMenu.png");
+		ui.window = LoadTexture("res/ui/Window.png");
 	}
 
 	// Update
@@ -314,19 +313,30 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 	}
 
 	// Draw
+
+	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
+	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+
+	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
+	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
+
+	wdDest.x = (float)GetScreenWidth() / 2 - wdDest.width / 2;
+	wdDest.y = (float)GetScreenHeight() / 2 - wdDest.height / 2;
+
 	BeginDrawing();
 
 	ClearBackground(BLACK);
 
-	DrawTexture(ui.bg, 0, 0, WHITE);
-	DrawRectangleRec(backImage, BLACK);
-	drawRectangleRecLines(backImage, WHITE);
+	DrawTexturePro(ui.bg, source, dest, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
+
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawButton(ui.btn[1]);
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 7; i++)
 	{
-		DrawText(credits[i], GetScreenWidth() / 2 - MeasureText(credits[i], 50) / 2, posY, 50, color[i]);
+		DrawText(credits[i], GetScreenWidth() / 2 - MeasureText(credits[i], (i >= 6 ? 20 : 50)) / 2,
+			posY, (i >= 6 ? 20 : 50), color[i]);
 		posY += 50;
 	}
 
@@ -378,7 +388,6 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 
 	ClearBackground(BLACK);
 	DrawTexture(ui.bg, 0, 0, WHITE);
-	DrawRectangleRec(wdDest, { 0, 0, 0, 150 });
 	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
 
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
