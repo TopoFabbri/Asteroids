@@ -1,6 +1,6 @@
 #include "Animation.h"
 
-Animation newAnimation(const char* path, int frames)
+Animation newAnimation(const char* path, int frames, float duration)
 {
 	Animation anim{};
 
@@ -10,6 +10,9 @@ Animation newAnimation(const char* path, int frames)
 	anim.curFrame = 0;
 	anim.frameWidth = (float)anim.sequence.width / (float)frames;
 	anim.rot = 0;
+	anim.timeElapsed = 0;
+	anim.duration = duration;
+	anim.drawRectangle = false;
 
 	anim.source = { 0, 0, anim.frameWidth, (float)anim.sequence.height };
 	anim.dest = anim.source;
@@ -32,10 +35,18 @@ void setSize(Animation& anim, Vector2 size)
 
 void updateAnimation(Animation& anim)
 {
-	anim.curFrame++;
+	float frameTime = anim.duration / (float)anim.frames;
+
+	anim.timeElapsed += GetFrameTime();
+
+	if (anim.timeElapsed >= frameTime * (float)anim.curFrame)
+		anim.curFrame++;
 
 	if (anim.curFrame > anim.frames)
 		anim.curFrame = 0;
+
+	if (anim.timeElapsed > anim.duration)
+		anim.timeElapsed = 0;
 
 	anim.source = { anim.frameWidth * (float)anim.curFrame, 0,
 		anim.frameWidth, (float)anim.sequence.height };
@@ -46,6 +57,9 @@ void drawFrame(Animation anim, Color tint)
 	DrawTexturePro(anim.sequence, anim.source, anim.dest, anim.origin,
 		anim.rot, tint);
 
-	DrawRectangleLines((int)anim.dest.x, (int)anim.dest.y, 
-		(int)anim.dest.width, (int)anim.dest.height, SKYBLUE);
+	if (anim.drawRectangle)
+	{
+		DrawRectangleLines((int)anim.dest.x, (int)anim.dest.y,
+			(int)anim.dest.width, (int)anim.dest.height, SKYBLUE);
+	}
 }

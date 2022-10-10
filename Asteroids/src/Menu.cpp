@@ -120,6 +120,15 @@ void updateButton(Button& btn, float posY)
 
 void controlsMenu(Settings& gSettings, Menu& ui)
 {
+	const int txtFontSize = 20;
+	const char* moveTxt[2] = {"Right click anywhere to", "move in that direction"};
+	const char* stopTxt[2] = {"Accelerate in opposite", "direction to stop"};
+	const char* fireTxt[2] = {"Left click anywhere to", "fire in that direction"};
+
+	int moveTxtSize[2] = {MeasureText(moveTxt[0], txtFontSize), MeasureText(moveTxt[1], txtFontSize)};
+	int stopTxtSize[2] = {MeasureText(stopTxt[0], txtFontSize), MeasureText(stopTxt[1], txtFontSize)};
+	int fireTxtSize[2] = {MeasureText(fireTxt[0], txtFontSize), MeasureText(fireTxt[1], txtFontSize)};
+
 	if (!ui.isActive)
 	{
 		ui.title = "Controls";
@@ -133,13 +142,17 @@ void controlsMenu(Settings& gSettings, Menu& ui)
 			ui.anim[i] = {};
 		}
 
-		ui.anim[0] = newAnimation("res/anims/MovementAnim.png", 44);
+		ui.anim[0] = newAnimation("res/anims/MovementAnim.png", 44, 1);
+		ui.anim[1] = newAnimation("res/anims/StopAnim.png", 32, 1);
+		ui.anim[2] = newAnimation("res/anims/ShootAnim.png", 6, 3);
 	}
 
 	// Update
+
 	controlsMenuUpdate(ui, gSettings);
 
 	// Draw
+
 	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
 	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
 
@@ -152,7 +165,15 @@ void controlsMenu(Settings& gSettings, Menu& ui)
 	BeginDrawing();
 	DrawTexturePro(ui.bg, source, dest, { 0, 0 }, 0, WHITE);
 	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
+	DrawText(moveTxt[0], (int)((float)GetScreenWidth() * (1.f / 3.f)) - moveTxtSize[0] / 2, 330, txtFontSize, WHITE);
+	DrawText(moveTxt[1], (int)((float)GetScreenWidth() * (1.f / 3.f)) - moveTxtSize[1] / 2, 355, txtFontSize, WHITE);
+	DrawText(stopTxt[0], (int)((float)GetScreenWidth() * (1.f / 3.f)) - stopTxtSize[0] / 2, 630, txtFontSize, WHITE);
+	DrawText(stopTxt[1], (int)((float)GetScreenWidth() * (1.f / 3.f)) - stopTxtSize[1] / 2, 655, txtFontSize, WHITE);
+	DrawText(fireTxt[0], (int)((float)GetScreenWidth() * (2.f / 3.f)) - fireTxtSize[0] / 2, 330, txtFontSize, WHITE);
+	DrawText(fireTxt[1], (int)((float)GetScreenWidth() * (2.f / 3.f)) - fireTxtSize[1] / 2, 355, txtFontSize, WHITE);
 	drawFrame(ui.anim[0], WHITE);
+	drawFrame(ui.anim[1], WHITE);
+	drawFrame(ui.anim[2], WHITE);
 
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawButton(ui.btn[1]);
@@ -170,8 +191,16 @@ void controlsMenuUpdate(Menu& ui, Settings& gSettings)
 		updateAnimation(ui.anim[i]);
 	}
 
-	setPos(ui.anim[0], { 0, 0 });
+	setPos(ui.anim[0], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest. width / 2, 400 });
 	setSize(ui.anim[0], { 200, 200 });
+	ui.anim[0].drawRectangle = true;
+
+	setPos(ui.anim[1], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest.width / 2, 700 });
+	setSize(ui.anim[1], { 200, 200 });
+	ui.anim[1].drawRectangle = true;
+
+	setPos(ui.anim[2], { (float)GetScreenWidth() * (2.f / 3.f) - ui.anim[0].dest.width / 2, 400 });
+	setSize(ui.anim[2], { 200, 200 });
 
 	if (isButtonPressed(ui.btn[1]))
 	{
