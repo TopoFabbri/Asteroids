@@ -17,5 +17,6 @@
 	};
 
 	Button createButton();
+	void updateButton(Button& btn);
 	void drawButton(Button& btn);
 	bool isButtonPressed(Button btn);

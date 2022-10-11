@@ -9,6 +9,7 @@ Menu createMenu()
 	menu.titlePos = { 0, 0 };
 	menu.btnQty = menu.maxBtns;
 	menu.chkBxQty = menu.maxChkBxs;
+	menu.cur = newCursor();
 	for (int i = 0; i < menu.btnQty; i++)
 	{
 		menu.btn[i] = createButton();
@@ -35,12 +36,14 @@ void mainMenu(Settings& gSettings, Menu& mMenu)
 		mMenu.btn[4].text = "Credits";
 		mMenu.bg = LoadTexture("res/bgs/backgroundMenu.png");
 		mMenu.window = LoadTexture("res/ui/Window.png");
+		mMenu.cur = newCursor();
 	}
 
 	// Update
 	positionTitle(mMenu);
-	takeInput(mMenu, gSettings);
 	updateButtons(mMenu);
+	updateCursor(mMenu.cur);
+	takeInput(mMenu, gSettings);
 
 	// draw
 	draw(mMenu);
@@ -70,6 +73,8 @@ void draw(Menu menu)
 	drawButton(menu.btn[3]);
 	drawButton(menu.btn[4]);
 
+	drawCursor(menu.cur);
+
 	EndDrawing();
 }
 
@@ -82,6 +87,15 @@ void positionTitle(Menu& menu)
 
 void takeInput(Menu& menu, Settings& gSettings)
 {
+	if (isHovering(menu.cur, menu.btn[3].rec)
+		|| isHovering(menu.cur, menu.btn[1].rec)
+		|| isHovering(menu.cur, menu.btn[2].rec)
+		|| isHovering(menu.cur, menu.btn[4].rec)
+		|| isHovering(menu.cur, menu.btn[0].rec))
+		menu.cur.state = Cursor::Hover;
+	else
+		menu.cur.state = Cursor::Idle;
+
 	if (isButtonPressed(menu.btn[3]))
 		gSettings.scene = Scene::ControlsMenu;
 
@@ -105,14 +119,20 @@ void updateButtons(Menu& menu)
 {
 	const float btnSpacing = 10.0f;
 
-	updateButton(menu.btn[0], ((float)GetScreenHeight() / 8) * 4);
-	updateButton(menu.btn[1], (float)GetScreenHeight() - (float)GetScreenHeight() / 8);
-	updateButton(menu.btn[2], menu.btn[0].rec.y + menu.btn[0].rec.height + btnSpacing);
-	updateButton(menu.btn[3], menu.btn[2].rec.y + menu.btn[2].rec.height + btnSpacing);
-	updateButton(menu.btn[4], menu.btn[3].rec.y + menu.btn[3].rec.height + btnSpacing);
+	positionButton(menu.btn[0], ((float)GetScreenHeight() / 8) * 4);
+	positionButton(menu.btn[1], (float)GetScreenHeight() - (float)GetScreenHeight() / 8);
+	positionButton(menu.btn[2], menu.btn[0].rec.y + menu.btn[0].rec.height + btnSpacing);
+	positionButton(menu.btn[3], menu.btn[2].rec.y + menu.btn[2].rec.height + btnSpacing);
+	positionButton(menu.btn[4], menu.btn[3].rec.y + menu.btn[3].rec.height + btnSpacing);
+
+	updateButton(menu.btn[0]);
+	updateButton(menu.btn[1]);
+	updateButton(menu.btn[2]);
+	updateButton(menu.btn[3]);
+	updateButton(menu.btn[4]);
 }
 
-void updateButton(Button& btn, float posY)
+void positionButton(Button& btn, float posY)
 {
 	btn.rec.y = posY;
 	btn.rec.x = ((float)GetScreenWidth() / 4);
@@ -121,13 +141,13 @@ void updateButton(Button& btn, float posY)
 void controlsMenu(Settings& gSettings, Menu& ui)
 {
 	const int txtFontSize = 20;
-	const char* moveTxt[2] = {"Right click anywhere to", "move in that direction"};
-	const char* stopTxt[2] = {"Accelerate in opposite", "direction to stop"};
-	const char* fireTxt[2] = {"Left click anywhere to", "fire in that direction"};
+	const char* moveTxt[2] = { "Right click anywhere to", "move in that direction" };
+	const char* stopTxt[2] = { "Accelerate in opposite", "direction to stop" };
+	const char* fireTxt[2] = { "Left click anywhere to", "fire in that direction" };
 
-	int moveTxtSize[2] = {MeasureText(moveTxt[0], txtFontSize), MeasureText(moveTxt[1], txtFontSize)};
-	int stopTxtSize[2] = {MeasureText(stopTxt[0], txtFontSize), MeasureText(stopTxt[1], txtFontSize)};
-	int fireTxtSize[2] = {MeasureText(fireTxt[0], txtFontSize), MeasureText(fireTxt[1], txtFontSize)};
+	int moveTxtSize[2] = { MeasureText(moveTxt[0], txtFontSize), MeasureText(moveTxt[1], txtFontSize) };
+	int stopTxtSize[2] = { MeasureText(stopTxt[0], txtFontSize), MeasureText(stopTxt[1], txtFontSize) };
+	int fireTxtSize[2] = { MeasureText(fireTxt[0], txtFontSize), MeasureText(fireTxt[1], txtFontSize) };
 
 	if (!ui.isActive)
 	{
@@ -177,6 +197,7 @@ void controlsMenu(Settings& gSettings, Menu& ui)
 
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawButton(ui.btn[1]);
+	drawCursor(ui.cur);
 
 	EndDrawing();
 }
@@ -185,13 +206,14 @@ void controlsMenuUpdate(Menu& ui, Settings& gSettings)
 {
 	positionTitle(ui);
 	updateButtons(ui);
+	updateCursor(ui.cur);
 
 	for (int i = 0; i < ui.maxAnims; i++)
 	{
 		updateAnimation(ui.anim[i]);
 	}
 
-	setPos(ui.anim[0], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest. width / 2, 400 });
+	setPos(ui.anim[0], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest.width / 2, 400 });
 	setSize(ui.anim[0], { 200, 200 });
 	ui.anim[0].drawRectangle = true;
 
@@ -201,6 +223,11 @@ void controlsMenuUpdate(Menu& ui, Settings& gSettings)
 
 	setPos(ui.anim[2], { (float)GetScreenWidth() * (2.f / 3.f) - ui.anim[0].dest.width / 2, 400 });
 	setSize(ui.anim[2], { 200, 200 });
+
+	if (isHovering(ui.cur, ui.btn[1].rec))
+		ui.cur.state = Cursor::Hover;
+	else
+		ui.cur.state = Cursor::Idle;
 
 	if (isButtonPressed(ui.btn[1]))
 	{
@@ -235,6 +262,7 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 
 	positionTitle(ui);
 	updateButtons(ui);
+	updateCursor(ui.cur);
 
 	for (int i = 0; i < ui.chkBxQty; i++)
 	{
@@ -259,6 +287,14 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 	else
 		gSettings.circleWarp = false;
 
+	if (isHovering(ui.cur, ui.chbxs[1].rec)
+		|| isHovering(ui.cur, ui.chbxs[2].rec)
+		|| isHovering(ui.cur, ui.chbxs[0].rec)
+		|| isHovering(ui.cur, ui.btn[1].rec))
+		ui.cur.state = Cursor::Hover;
+	else
+		ui.cur.state = Cursor::Idle;
+
 
 	// Draw
 	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
@@ -280,6 +316,7 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 	{
 		drawCheckbox(ui.chbxs[i]);
 	}
+	drawCursor(ui.cur);
 
 	EndDrawing();
 }
@@ -287,7 +324,7 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 void creditsMenu(Settings& gSettings, Menu& ui)
 {
 	const char* credits[] = { "Programing:", "Topo - Mateo Fabbri","", "Art:", "Chiara Colombo",
-		"CraftPix", "(https://craftpix.net/product/asteroids-crusher-2d-game-kit/)"};
+		"CraftPix", "(https://craftpix.net/product/asteroids-crusher-2d-game-kit/)" };
 	const Color color[] = { WHITE, WHITE, BLACK, RED, RED, RED, RED };
 	int posY = GetScreenHeight() / 2 - 50 * 3;
 
@@ -305,12 +342,18 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 	// Update
 	positionTitle(ui);
 	updateButtons(ui);
+	updateCursor(ui.cur);
 
 	if (isButtonPressed(ui.btn[1]))
 	{
 		gSettings.scene = Scene::MainMenu;
 		ui.isActive = false;
 	}
+	if (isHovering(ui.cur, ui.btn[1].rec))
+		ui.cur.state = Cursor::Hover;
+	else
+		ui.cur.state = Cursor::Idle;
+
 
 	// Draw
 
@@ -339,6 +382,7 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 			posY, (i >= 6 ? 20 : 50), color[i]);
 		posY += 50;
 	}
+	drawCursor(ui.cur);
 
 	EndDrawing();
 }
@@ -364,6 +408,7 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 	// Update
 	positionTitle(ui);
 	updateButtons(ui);
+	updateCursor(ui.cur);
 
 	if (isButtonPressed(ui.btn[1]))
 	{
@@ -376,6 +421,12 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 		gSettings.scene = Scene::Game;
 		ui.isActive = false;
 	}
+
+	if (isHovering(ui.cur, ui.btn[0].rec)
+		|| isHovering(ui.cur, ui.btn[1].rec))
+		ui.cur.state = Cursor::Hover;
+	else
+		ui.cur.state = Cursor::Idle;
 
 	// Draw
 	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
@@ -393,6 +444,7 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
 	drawButton(ui.btn[0]);
 	drawButton(ui.btn[1]);
+	drawCursor(ui.cur);
 
 	EndDrawing();
 }

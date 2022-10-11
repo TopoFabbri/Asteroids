@@ -3,6 +3,7 @@
 #include "CheckBox.h"
 #include "Settings.h"
 #include "Animation.h"
+#include "Cursor.h"
 #include "Topo.h"
 
 struct Menu
@@ -18,6 +19,7 @@ struct Menu
 	bool isActive;
 	const char* title;
 	Vector2 titlePos;
+	Cursor cur;
 	Button btn[maxBtns];
 	CheckBox chbxs[maxChkBxs];
 	Animation anim[maxAnims];
@@ -29,7 +31,7 @@ void draw(Menu menu);
 void positionTitle(Menu& menu);
 void takeInput(Menu& menu, Settings& gSettings);
 void updateButtons(Menu& menu);
-void updateButton(Button& btn, float posY);
+void positionButton(Button& btn, float posY);
 void controlsMenu(Settings& gSettings, Menu& ui);
 void controlsMenuUpdate(Menu& ui, Settings& gSettings);
 void settingsMenu(Settings& gSettings, Menu& ui);

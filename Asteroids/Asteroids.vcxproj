@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Asteroid.cpp" />
     <ClCompile Include="src\Bullet.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="src\Bullet.h" />
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\CheckBox.h" />
+    <ClInclude Include="src\Cursor.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\Settings.h" />

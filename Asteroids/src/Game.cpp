@@ -31,6 +31,8 @@ Game newGame()
 
 void loop(Game& game)
 {
+	game.cur = newCursor();
+
 	while (game.settings.scene != Scene::Exit)
 	{
 		if (WindowShouldClose())
@@ -67,6 +69,8 @@ void loop(Game& game)
 
 		default:;
 		}
+
+		updateCursor(game.cur);
 	}
 }
 
@@ -129,6 +133,7 @@ void draw(Game& game)
 
 	BeginDrawing();
 	ClearBackground(BLACK);
+
 	DrawTexturePro(game.bg, bgSource, bgDest, { 0, 0 }, 0, WHITE);
 	DrawTexturePro(game.bgStars, bgSource, bgDest, { 0, 0 }, 0, game.starBrightness);
 	DrawTexturePro(game.planets[0].image, bgSource, game.planets[0].dest, { 0, 0 }, 0, WHITE);
@@ -148,6 +153,9 @@ void draw(Game& game)
 
 	if (game.settings.drawFps)
 		DrawFPS(10, 10);
+
+	if (game.settings.scene == Scene::Game)
+		drawCursor(game.cur);
 
 	EndDrawing();
 }

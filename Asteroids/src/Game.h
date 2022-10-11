@@ -5,6 +5,7 @@
 #include "Settings.h"
 #include "Menu.h"
 #include "Asteroid.h"
+#include "Cursor.h"
 
 struct Parallax
 {
@@ -32,6 +33,7 @@ struct Game
 	Parallax planets[2];
 	Texture2D bgFog;
 	Asteroid ast[maxAst];
+	Cursor cur;
 	Color starBrightness;
 	bool dimming;
 	int score;
