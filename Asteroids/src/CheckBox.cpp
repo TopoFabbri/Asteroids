@@ -16,7 +16,9 @@ CheckBox createCheckbox()
 
 void drawCheckbox(CheckBox& check)
 {
-	float shadowOffset = 4;
+	float shadowOffset = (float)GetScreenWidth() * (1.f/480.f);
+	check.rec.width = (float)GetScreenWidth() * (5.f / 384.f);
+	check.rec.height = (float)GetScreenWidth() * (5.f / 384.f);
 
 	if (check.checked)
 		DrawRectangleRec(check.rec, check.fill);
@@ -24,8 +26,10 @@ void drawCheckbox(CheckBox& check)
 		DrawRectangleRec(check.rec, check.empty);
 
 	DrawRectangleLinesEx(check.rec, 3, check.out);
-	DrawText(check.txt, (int)(check.rec.x + check.rec.width + 10 + shadowOffset), (int)(check.rec.y + shadowOffset), 30, BLACK);
-	DrawText(check.txt, (int)(check.rec.x + check.rec.width + 10), (int)check.rec.y, 30, WHITE);
+	DrawText(check.txt, (int)(check.rec.x + check.rec.width + 10 + shadowOffset),
+		(int)(check.rec.y + shadowOffset),	
+		(int)((float)GetScreenWidth() * (1.f/64.f)), BLACK);
+	DrawText(check.txt, (int)(check.rec.x + check.rec.width + 10), (int)check.rec.y, (int)((float)GetScreenWidth() * (1.f / 64.f)), WHITE);
 
 	if (CheckCollisionPointRec(GetMousePosition(), check.rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 	{

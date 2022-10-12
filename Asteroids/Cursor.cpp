@@ -6,7 +6,7 @@ Cursor newCursor()
 
 	cur.state = Cursor::Idle;
 	cur.pos = GetMousePosition();
-	cur.size = { 35, 35 };
+	cur.size = { (float)GetScreenWidth() * (7.f/384.f), (float)GetScreenWidth() * (7.f / 384.f) };
 	cur.idle = LoadTexture("res/ui/CursorMenuIdle.png");
 	cur.hover = LoadTexture("res/ui/CursorMenuHover.png");
 

@@ -35,7 +35,7 @@ void runProgram()
 void defaults()
 {
     srand(time(nullptr));
-    InitWindow(1920, 1080, "Asteroids - Topo");
+    InitWindow(1024, 768, "Asteroids - Topo");
     HideCursor();
     SetExitKey(NULL);
 

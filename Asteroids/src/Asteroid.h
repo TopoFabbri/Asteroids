@@ -12,8 +12,7 @@ struct Rock
 		Small,
 	};
 
-	const int maxSpeed = 200;
-
+	int maxSpeed;
 	float size;
 	bool active;
 	float ghostCounter;

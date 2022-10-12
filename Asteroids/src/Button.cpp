@@ -39,6 +39,8 @@ Button createButton()
 
 void updateButton(Button& btn)
 {
+	btn.size = (float)GetScreenWidth() * (1.f / 64.f);
+
 	const Vector2 txtSize = MeasureTextEx(btn.font, btn.text, btn.size, btn.txtSpacing);
 
 	btn.rec.width = txtSize.x + 2 * btn.indent;

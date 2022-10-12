@@ -90,6 +90,8 @@ void drawBullet(Bullet& bul, bool showColliders)
 	Rectangle source = { size.x / 6 + 5 * size.x / 6, 0, size.x / 6, size.y };
 	Rectangle dest = { bul.pos.x, bul.pos.y, bul.size * 2, bul.size * 2 * textureAspect };
 
+	bul.explosionSize = (float)GetScreenWidth() * (5.f / 192.f);
+
 	float rot = getRotation(bul.vel);
 
 	DrawTexturePro(bul.sprite, source, dest, { dest.width / 2, dest.height / 2 }, rot, WHITE);

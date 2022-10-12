@@ -129,7 +129,7 @@ void update(Game& game)
 void draw(Game& game)
 {
 	Rectangle bgSource{ 0, 0, (float)game.bg.width, (float)game.bg.height };
-	Rectangle bgDest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+	Rectangle bgDest{ -((float)GetScreenHeight() * (16.f / 9.f) - (float)GetScreenWidth())/2, 0, (float)GetScreenHeight() * (16.f / 9.f), (float)GetScreenHeight() };
 
 	BeginDrawing();
 	ClearBackground(BLACK);
@@ -340,9 +340,9 @@ Parallax newParallax(float mult)
 {
 	Parallax par{};
 
-	par.dest = { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight(), };
-	par.minPos = { -100, -100 };
-	par.maxPos = { 100, 100 };
+	par.dest = { -((float)GetScreenHeight() * (16.f / 9.f) - (float)GetScreenWidth()) / 2, 0, (float)GetScreenHeight() * (16.f / 9.f), (float)GetScreenHeight() };
+	par.minPos = { -((float)GetScreenWidth() * (5.f / 96.f)) + par.dest.x, -((float)GetScreenHeight() * (5.f / 54.f)) };
+	par.maxPos = { ((float)GetScreenWidth() * (5.f / 96.f)) + par.dest.x, ((float)GetScreenHeight() * (5.f / 54.f)) };
 	par.mult = mult;
 
 	return par;

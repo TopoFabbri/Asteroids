@@ -52,7 +52,7 @@ void mainMenu(Settings& gSettings, Menu& mMenu)
 void draw(Menu menu)
 {
 	Rectangle bgSource{ 0, 0, (float)menu.bg.width, (float)menu.bg.height };
-	Rectangle screen{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+	Rectangle bgDest{ -((float)GetScreenHeight() * (16.f / 9.f) - (float)GetScreenWidth())/2, 0, (float)GetScreenHeight() * (16.f / 9.f), (float)GetScreenHeight() };
 
 	Rectangle wdSource{ 0, 0, (float)menu.window.width, (float)menu.window.height };
 	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
@@ -63,10 +63,10 @@ void draw(Menu menu)
 	BeginDrawing();
 
 	ClearBackground(BLACK);
-	DrawTexturePro(menu.bg, bgSource, screen, { 0, 0 }, 0, WHITE);
+	DrawTexturePro(menu.bg, bgSource, bgDest, { 0, 0 }, 0, WHITE);
 	DrawTexturePro(menu.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
 
-	DrawText(menu.title, (int)menu.titlePos.x, (int)menu.titlePos.y, 50, WHITE);
+	DrawText(menu.title, (int)menu.titlePos.x, (int)menu.titlePos.y, (int)((float)GetScreenWidth() * (5.f / 192.f)), WHITE);
 	drawButton(menu.btn[0]);
 	drawButton(menu.btn[1]);
 	drawButton(menu.btn[2]);
@@ -80,7 +80,7 @@ void draw(Menu menu)
 
 void positionTitle(Menu& menu)
 {
-	menu.titlePos.x = (float)MeasureText(menu.title, 50);
+	menu.titlePos.x = (float)MeasureText(menu.title, (int)((float)GetScreenWidth() * (5.f / 192.f)));
 	menu.titlePos.x = (float)GetScreenWidth() / 2 - menu.titlePos.x / 2;
 	menu.titlePos.y = (float)GetScreenHeight() * (9.f / 64.f);
 }
@@ -117,7 +117,7 @@ void takeInput(Menu& menu, Settings& gSettings)
 
 void updateButtons(Menu& menu)
 {
-	const float btnSpacing = 10.0f;
+	const float btnSpacing = (float)GetScreenHeight() * (1.f / 108.f);
 
 	positionButton(menu.btn[0], ((float)GetScreenHeight() / 8) * 4);
 	positionButton(menu.btn[1], (float)GetScreenHeight() - (float)GetScreenHeight() / 8);
@@ -140,7 +140,7 @@ void positionButton(Button& btn, float posY)
 
 void controlsMenu(Settings& gSettings, Menu& ui)
 {
-	const int txtFontSize = 20;
+	const int txtFontSize = (int)((float)GetScreenWidth() * (1.f / 96.f));
 	const char* moveTxt[2] = { "Right click anywhere to", "move in that direction" };
 	const char* stopTxt[2] = { "Accelerate in opposite", "direction to stop" };
 	const char* fireTxt[2] = { "Left click anywhere to", "fire in that direction" };
@@ -174,7 +174,7 @@ void controlsMenu(Settings& gSettings, Menu& ui)
 	// Draw
 
 	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
-	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+	Rectangle dest{ -((float)GetScreenHeight() * (16.f / 9.f) - (float)GetScreenWidth()) / 2, 0, (float)GetScreenHeight() * (16.f / 9.f), (float)GetScreenHeight() };
 
 	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
 	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
@@ -185,17 +185,24 @@ void controlsMenu(Settings& gSettings, Menu& ui)
 	BeginDrawing();
 	DrawTexturePro(ui.bg, source, dest, { 0, 0 }, 0, WHITE);
 	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
-	DrawText(moveTxt[0], (int)((float)GetScreenWidth() * (1.f / 3.f)) - moveTxtSize[0] / 2, 330, txtFontSize, WHITE);
-	DrawText(moveTxt[1], (int)((float)GetScreenWidth() * (1.f / 3.f)) - moveTxtSize[1] / 2, 355, txtFontSize, WHITE);
-	DrawText(stopTxt[0], (int)((float)GetScreenWidth() * (1.f / 3.f)) - stopTxtSize[0] / 2, 630, txtFontSize, WHITE);
-	DrawText(stopTxt[1], (int)((float)GetScreenWidth() * (1.f / 3.f)) - stopTxtSize[1] / 2, 655, txtFontSize, WHITE);
-	DrawText(fireTxt[0], (int)((float)GetScreenWidth() * (2.f / 3.f)) - fireTxtSize[0] / 2, 330, txtFontSize, WHITE);
-	DrawText(fireTxt[1], (int)((float)GetScreenWidth() * (2.f / 3.f)) - fireTxtSize[1] / 2, 355, txtFontSize, WHITE);
+	DrawText(moveTxt[0], (int)((float)GetScreenWidth() * (1.f / 3.f)) - moveTxtSize[0] / 2,
+		(int)((float)GetScreenHeight() * (11.f / 36.f)), txtFontSize, WHITE);
+	DrawText(moveTxt[1], (int)((float)GetScreenWidth() * (1.f / 3.f)) - moveTxtSize[1] / 2,
+		(int)((float)GetScreenHeight() * (71.f / 216.f)), txtFontSize, WHITE);
+	DrawText(stopTxt[0], (int)((float)GetScreenWidth() * (1.f / 3.f)) - stopTxtSize[0] / 2,
+		(int)((float)GetScreenHeight() * (7.f / 12.f)), txtFontSize, WHITE);
+	DrawText(stopTxt[1], (int)((float)GetScreenWidth() * (1.f / 3.f)) - stopTxtSize[1] / 2,
+		(int)((float)GetScreenHeight() * (131.f / 216.f)), txtFontSize, WHITE);
+	DrawText(fireTxt[0], (int)((float)GetScreenWidth() * (2.f / 3.f)) - fireTxtSize[0] / 2,
+		(int)((float)GetScreenHeight() * (11.f / 36.f)), txtFontSize, WHITE);
+	DrawText(fireTxt[1], (int)((float)GetScreenWidth() * (2.f / 3.f)) - fireTxtSize[1] / 2,
+		(int)((float)GetScreenHeight() * (71.f / 216.f)), txtFontSize, WHITE);
 	drawFrame(ui.anim[0], WHITE);
 	drawFrame(ui.anim[1], WHITE);
 	drawFrame(ui.anim[2], WHITE);
 
-	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
+	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y,
+		(int)((float)GetScreenWidth() * (5.f / 192.f)), WHITE);
 	drawButton(ui.btn[1]);
 	drawCursor(ui.cur);
 
@@ -213,16 +220,19 @@ void controlsMenuUpdate(Menu& ui, Settings& gSettings)
 		updateAnimation(ui.anim[i]);
 	}
 
-	setPos(ui.anim[0], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest.width / 2, 400 });
-	setSize(ui.anim[0], { 200, 200 });
+	setPos(ui.anim[0], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest.width / 2, (float)GetScreenHeight() * (10.f/27.f)});
+	setSize(ui.anim[0], { (float)GetScreenWidth() * (5.f/48.f),
+		(float)GetScreenWidth()* (5.f / 48.f) });
 	ui.anim[0].drawRectangle = true;
 
-	setPos(ui.anim[1], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest.width / 2, 700 });
-	setSize(ui.anim[1], { 200, 200 });
+	setPos(ui.anim[1], { (float)GetScreenWidth() * (1.f / 3.f) - ui.anim[0].dest.width / 2, (float)GetScreenHeight() * (35.f / 54.f) });
+	setSize(ui.anim[1], { (float)GetScreenWidth() * (5.f / 48.f),
+		(float)GetScreenWidth()* (5.f / 48.f) });
 	ui.anim[1].drawRectangle = true;
 
-	setPos(ui.anim[2], { (float)GetScreenWidth() * (2.f / 3.f) - ui.anim[0].dest.width / 2, 400 });
-	setSize(ui.anim[2], { 200, 200 });
+	setPos(ui.anim[2], { (float)GetScreenWidth() * (2.f / 3.f) - ui.anim[0].dest.width / 2, (float)GetScreenHeight() * (10.f / 27.f) });
+	setSize(ui.anim[2], { (float)GetScreenWidth() * (5.f / 48.f),
+		(float)GetScreenWidth()* (5.f / 48.f) });
 
 	if (isHovering(ui.cur, ui.btn[1].rec))
 		ui.cur.state = Cursor::Hover;
@@ -267,7 +277,7 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 	for (int i = 0; i < ui.chkBxQty; i++)
 	{
 		ui.chbxs[i].rec.x = (float)GetScreenWidth() / 4;
-		ui.chbxs[i].rec.y = (float)(350 + i * 100);
+		ui.chbxs[i].rec.y = ((float)GetScreenHeight() * (35.f/108.f) + (float)i * ((float)GetScreenHeight() * (5.f/54.f)));
 	}
 
 	// Input
@@ -298,7 +308,7 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 
 	// Draw
 	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
-	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+	Rectangle dest{ -((float)GetScreenHeight() * (16.f / 9.f) - (float)GetScreenWidth()) / 2, 0, (float)GetScreenHeight() * (16.f / 9.f), (float)GetScreenHeight() };
 
 	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
 	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
@@ -311,7 +321,8 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
 
 	drawButton(ui.btn[1]);
-	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
+	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y,
+		(int)((float)GetScreenWidth() * (5.f / 192.f)), WHITE);
 	for (int i = 0; i < ui.chkBxQty; i++)
 	{
 		drawCheckbox(ui.chbxs[i]);
@@ -354,11 +365,10 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 	else
 		ui.cur.state = Cursor::Idle;
 
-
 	// Draw
 
 	Rectangle source{ 0, 0, (float)ui.bg.width, (float)ui.bg.height };
-	Rectangle dest{ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+	Rectangle dest{ -((float)GetScreenHeight() * (16.f / 9.f) - (float)GetScreenWidth()) / 2, 0, (float)GetScreenHeight() * (16.f / 9.f), (float)GetScreenHeight() };
 
 	Rectangle wdSource{ 0, 0, (float)ui.window.width, (float)ui.window.height };
 	Rectangle wdDest{ 0, 0, (float)GetScreenWidth() * (2.f / 3.f), (float)GetScreenHeight() * (19.f / 20.f) };
@@ -373,13 +383,16 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 	DrawTexturePro(ui.bg, source, dest, { 0, 0 }, 0, WHITE);
 	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
 
-	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
+	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y,
+		(int)((float)GetScreenWidth() * (5.f / 192.f)), WHITE);
 	drawButton(ui.btn[1]);
 
 	for (int i = 0; i < 7; i++)
 	{
-		DrawText(credits[i], GetScreenWidth() / 2 - MeasureText(credits[i], (i >= 6 ? 20 : 50)) / 2,
-			posY, (i >= 6 ? 20 : 50), color[i]);
+		const int fontSize = (int)((float)GetScreenWidth() * ( i >= 6 ? (1.f / 96.f) : (5.f / 192.f)));
+
+		DrawText(credits[i], GetScreenWidth() / 2 - MeasureText(credits[i], fontSize) / 2,
+			posY, fontSize, color[i]);
 		posY += 50;
 	}
 	drawCursor(ui.cur);
@@ -392,7 +405,6 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 	Vector2 popInd{ (float)GetScreenWidth() / 8, 0 };
 	const Rectangle backImage{ popInd.x, popInd.y,
 		6 * popInd.x, (float)GetScreenHeight() };
-
 
 	if (!ui.isActive)
 	{
@@ -441,7 +453,7 @@ void pauseMenu(Settings& gSettings, Menu& ui)
 	DrawTexture(ui.bg, 0, 0, WHITE);
 	DrawTexturePro(ui.window, wdSource, wdDest, { 0, 0 }, 0, WHITE);
 
-	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, 50, WHITE);
+	DrawText(ui.title, (int)ui.titlePos.x, (int)ui.titlePos.y, (int)((float)GetScreenWidth() * (5.f / 192.f)), WHITE);
 	drawButton(ui.btn[0]);
 	drawButton(ui.btn[1]);
 	drawCursor(ui.cur);

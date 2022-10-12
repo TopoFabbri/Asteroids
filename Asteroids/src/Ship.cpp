@@ -23,13 +23,13 @@ Ship newShip()
 	ship.spriteMove = shipMove;
 	ship.spriteBoth = shipBoth;
 	ship.sprite = ship.spriteNone;
-	ship.accel = 100;
-	ship.speed = 5;
-	ship.size = 30;
+	ship.accel = (float)GetScreenWidth() * (5.f/96.f);
+	ship.speed = (float)GetScreenWidth() * (1.f / 384.f);
+	ship.size = (float)GetScreenWidth() * (1.f / 64.f);
 	ship.rot = 0;
-	ship.maxSpeed = 1000;
+	ship.maxSpeed = (float)GetScreenWidth() * (25.f / 48.f);
 	ship.lives = 3;
-	ship.recoil = 20;
+	ship.recoil = (float)GetScreenWidth() * (1.f / 96.f);
 
 	return ship;
 }
@@ -80,8 +80,10 @@ void drawShip(Ship& ship, bool showColliders)
 	}
 
 	DrawTexturePro(ship.sprite, source, dest, { dest.width / 2, dest.height / 2 }, ship.rot, WHITE);
+
 	if (showColliders)
 		DrawCircleLines((int)ship.pos.x, (int)ship.pos.y, ship.size, WHITE);
+
 	drawShipLives(ship);
 }
 
@@ -133,7 +135,8 @@ void shipAnimator(Ship& ship)
 
 void drawShipLives(Ship& ship)
 {
-	const int size = 60;
+	const float size = (float)GetScreenWidth() * (1.f / 32.f);
+
 	Rectangle source{ 0, 0, (float)ship.spriteNone.width, (float)ship.spriteNone.height };
 	Rectangle dest{ (float)GetScreenWidth() / 2 - (float)(size * ship.lives) / 2,
 		(float)size / 2, size, size };

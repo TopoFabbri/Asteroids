@@ -6,22 +6,24 @@ Texture2D asteroidSmall;
 
 void newRock(Rock& rock, Rock::State state)
 {
+	rock.maxSpeed = (int)((float)GetScreenWidth() * (5.f / 48.f));
+
 	switch (state)
 	{
 	case Rock::Big:
-		rock.size = 40;
+		rock.size = (float)GetScreenWidth() * (1.f / 48.f);
 		rock.active = true;
 		rock.sprite = asteroidBig;
 		break;
 
 	case Rock::Med:
-		rock.size = 20;
+		rock.size = (float)GetScreenWidth() * (1.f / 96.f);
 		rock.active = false;
 		rock.sprite = asteroidMed;
 		break;
 
 	case Rock::Small:
-		rock.size = 10;
+		rock.size = (float)GetScreenWidth() * (1.f / 192.f);
 		rock.active = false;
 		rock.sprite = asteroidSmall;
 		break;
