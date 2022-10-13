@@ -41,8 +41,9 @@ void newRock(Rock& rock, Rock::State state)
 	rock.rot = (float)(rand() % 360);
 	randomRotSpeed(rock.rotSpeed);
 
-	int rn = rand() % 54 + 200;
-	Color color{ (unsigned char)rand, (unsigned char)rand, (unsigned char)rand, 254 };
+	int rn = rand() % 254;
+	unsigned char brightness = (unsigned char)rn;
+	Color color{ brightness, brightness, brightness, 254 };
 
 	rock.color = color;
 }
