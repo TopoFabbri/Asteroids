@@ -4,6 +4,7 @@
 
 struct Bullet
 {
+	Sound shoot;
 	Vector2 pos;
 	Vector2 vel;
 	Texture2D sprite;

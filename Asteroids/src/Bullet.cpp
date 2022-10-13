@@ -6,6 +6,7 @@ Bullet newBullet()
 {
 	Bullet bul{};
 
+	bul.shoot = LoadSound("aud/Shoot.wav");
 	bul.pos = {0, 0};
 	bul.vel = { 0, 0 };
 	bul.sprite = laser;
@@ -44,6 +45,8 @@ void fireBullet(Vector2 pos, Bullet& bul)
 	bul.hit = false;
 	bul.loaded = false;
 	bul.curLife = 0;
+	SetSoundVolume(bul.shoot, 0.5f);
+	PlaySound(bul.shoot);
 }
 
 void moveBullet(Bullet& bul, Settings settings)

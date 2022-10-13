@@ -1,11 +1,14 @@
 #include "Game.h"
 
+#include <iostream>
+
 Texture2D space;
 
 Game newGame()
 {
 	Game game;
 
+	game.music = LoadMusicStream("aud/Music.mp3");
 	game.settings = newSettings();
 	game.ship = newShip();
 	game.planets[0] = newParallax(0.05f);
@@ -93,6 +96,7 @@ void begin(Game& game)
 	loadTextures(game);
 	game.ship = newShip();
 	game.score = 0;
+	PlayMusicStream(game.music);
 
 	for (int i = 0; i < Game::maxAst; i++)
 	{
@@ -102,6 +106,7 @@ void begin(Game& game)
 
 void update(Game& game)
 {
+	UpdateMusicStream(game.music);
 	input(game);
 	checkCollisions(game);
 	moveShip(game.ship, game.settings);

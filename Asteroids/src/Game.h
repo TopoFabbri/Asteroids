@@ -20,6 +20,7 @@ struct Game
 {
 	static const int maxAst = 10;
 
+	Music music;
 	Settings settings;
 	Ship ship;
 	bool isPlaying;

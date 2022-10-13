@@ -31,6 +31,7 @@ void newRock(Rock& rock, Rock::State state)
 	default:;
 	}
 
+	rock.crash = LoadSound("aud/Explosion.wav");
 	rock.ghostCounter = 0;
 	rock.state = state;
 	rock.vel = { (float)(rand() % (int)(GetScreenWidth())), (float)(rand() % (int)(GetScreenHeight())) };
@@ -40,7 +41,7 @@ void newRock(Rock& rock, Rock::State state)
 	rock.rot = (float)(rand() % 360);
 	randomRotSpeed(rock.rotSpeed);
 
-	int rn = rand() % 254;
+	int rn = rand() % 54 + 200;
 	Color color{ (unsigned char)rand, (unsigned char)rand, (unsigned char)rand, 254 };
 
 	rock.color = color;
@@ -230,6 +231,8 @@ bool checkAsteroidCollision(Asteroid& ast, Circle cir)
 		{
 			collideBigAsteroid(ast);
 			collided = true;
+			SetSoundVolume(ast.big.crash, 0.5f);
+			PlaySound(ast.big.crash);
 		}
 	}
 
@@ -241,6 +244,8 @@ bool checkAsteroidCollision(Asteroid& ast, Circle cir)
 			{
 				collideMidAsteroid(ast, i);
 				collided = true;
+				SetSoundVolume(ast.med[i].crash, 0.5f);
+				PlaySound(ast.med[i].crash);
 			}
 		}
 
@@ -252,6 +257,8 @@ bool checkAsteroidCollision(Asteroid& ast, Circle cir)
 				{
 					ast.small[i][j].active = false;
 					collided = true;
+					SetSoundVolume(ast.small[i][j].crash, 0.5f);
+					PlaySound(ast.small[i][j].crash);
 				}
 			}
 		}

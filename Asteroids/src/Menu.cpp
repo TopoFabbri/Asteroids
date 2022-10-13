@@ -334,9 +334,18 @@ void settingsMenu(Settings& gSettings, Menu& ui)
 
 void creditsMenu(Settings& gSettings, Menu& ui)
 {
-	const char* credits[] = { "Programing:", "Topo - Mateo Fabbri","", "Art:", "Chiara Colombo",
-		"CraftPix", "(https://craftpix.net/product/asteroids-crusher-2d-game-kit/)" };
-	const Color color[] = { WHITE, WHITE, BLACK, RED, RED, RED, RED };
+	const char* programming[] = { "Programing:", "Topo - Mateo Fabbri" };
+
+	const char* art[]{ "Art:", "Chiara Colombo", "CraftPix",
+		"(https://craftpix.net/product/asteroids-crusher-2d-game-kit/)" };
+
+	const char* audio[]{"Audio:", "Shoot: Leszek_Szary",
+		"(https://freesound.org/people/Leszek_Szary/sounds/146730/)",
+		"Explosion: runningmind",
+		"(https://freesound.org/people/runningmind/sounds/387858/)",
+		"Music: LagMusics",
+		"(https://freesound.org/people/LagMusics/sounds/578908/)"};
+
 	int posY = GetScreenHeight() / 2 - 50 * 3;
 
 	if (!ui.isActive)
@@ -387,14 +396,33 @@ void creditsMenu(Settings& gSettings, Menu& ui)
 		(int)((float)GetScreenWidth() * (5.f / 192.f)), WHITE);
 	drawButton(ui.btn[1]);
 
+	for (int i = 0; i < 2; i++)
+	{
+		const int fontSize = (int)((float)GetScreenWidth() * (1.f / 48.f));
+
+		DrawText(programming[i], (int)((float)GetScreenWidth() * (1.f/4.f)), posY, fontSize, WHITE);
+
+		posY += (int)((float)GetScreenHeight() * (5.f / 108.f));
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		const int fontSize = (int)((float)GetScreenWidth() * ( i >= 3 ? (1.f / 64.f) : (1.f / 48.f)));
+
+		DrawText(art[i], (int)((float)GetScreenWidth() * (1.f/4.f)), posY, fontSize, RED);
+
+		posY += (int)((float)GetScreenHeight() * (5.f / 108.f));
+	}
+
 	for (int i = 0; i < 7; i++)
 	{
-		const int fontSize = (int)((float)GetScreenWidth() * ( i >= 6 ? (1.f / 96.f) : (5.f / 192.f)));
+		const int fontSize = (int)((float)GetScreenWidth() * ((i % 2 == 0 && i != 0) ? (1.f / 64.f) : (1.f / 48.f)));
 
-		DrawText(credits[i], GetScreenWidth() / 2 - MeasureText(credits[i], fontSize) / 2,
-			posY, fontSize, color[i]);
-		posY += 50;
+		DrawText(audio[i], (int)((float)GetScreenWidth() * (1.f/4.f)), posY, fontSize, GREEN);
+
+		posY += (int)((float)GetScreenHeight() * (5.f / 108.f));
 	}
+
 	drawCursor(ui.cur);
 
 	EndDrawing();

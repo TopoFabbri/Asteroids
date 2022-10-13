@@ -38,6 +38,8 @@ void defaults()
     InitWindow(1024, 768, "Asteroids - Topo");
     HideCursor();
     SetExitKey(NULL);
+    InitAudioDevice();
+    SetTargetFPS(60);
 
     ClearBackground(BLACK);
 }

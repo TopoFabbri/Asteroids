@@ -20,6 +20,7 @@ struct Rock
 	float rot;
 	float rotSpeed;
 
+	Sound crash;
 	State state;
 	Vector2 vel;
 	Vector2 pos;
