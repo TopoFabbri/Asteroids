@@ -124,6 +124,11 @@
       <AdditionalDependencies>raylib.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <PostBuildEvent>
+      <Command>IF exist "$(TargetDir)res" rd "$(TargetDir)res"
+MKDIR  "$(TargetDir)res"
+XCOPY "$(ProjectDir)res" "$(TargetDir)res" /s /i /y /d</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -159,6 +164,11 @@
       <AdditionalDependencies>raylib.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <PostBuildEvent>
+      <Command>IF exist "$(TargetDir)res" rd "$(TargetDir)res"
+MKDIR  "$(TargetDir)res"
+XCOPY "$(ProjectDir)res" "$(TargetDir)res" /s /i /y /d</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp" />
